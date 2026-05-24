@@ -1,0 +1,43 @@
+name: Discord Release Notifier
+on:
+  release:
+    types: [published]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Changelog from Commits
+        id: build_changelog
+        uses: mikepenz/release-changelog-builder-action@v4
+        with:
+          configurationJson: |
+            {
+              "template": "${{CHANGELOG}}",
+              "categories": [
+                {
+                  "title": "## 📝 Commit History",
+                  "labels": ["*"]
+                }
+              ],
+              "ignore_labels": [],
+              "max_pull_requests": 1000,
+              "max_commits": 1000
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Send Release to Discord
+        run: |
+          # Use a JSON safe variable for the body
+          CONTENT="${{ steps.build_changelog.outputs.changelog }}"
+          
+          curl -H "Content-Type: application/json" \
+          -X POST -d "{
+            \"embeds\": [{
+              \"title\": \"🚀 New Update: ${{ github.event.release.name }}\",
+              \"url\": \"${{ github.event.release.html_url }}\",
+              \"description\": \"$CONTENT\",
+              \"color\": 3447003
+            }]
+          }" ${{ secrets.DISCORD_WEBHOOK_URL }}
