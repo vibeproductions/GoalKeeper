@@ -13,10 +13,11 @@ jobs:
         with:
           configurationJson: |
             {
-              "template": "${{CHANGELOG}}",
+              "mode": "COMMIT",
+              "template": "#CHANGELOG#",
               "categories": [
                 {
-                  "title": "## 📝 Commit History",
+                  "title": "## 📝 Changes",
                   "labels": ["*"]
                 }
               ],
