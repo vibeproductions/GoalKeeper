@@ -2,7 +2,7 @@
 // All GoalKeeper data models — translated from Swift to Dart
 
 import 'package:flutter/material.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
 
 // ─── Goal Step ────────────────────────────────────────────────────────────────
 

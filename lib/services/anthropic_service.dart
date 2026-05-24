@@ -4,8 +4,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:goalkeeper_flutter/models/models.dart';
-import 'package:goalkeeper_flutter/services/keychain_service.dart';
+import 'package:goalkeeper/models/models.dart';
+import 'package:goalkeeper/services/keychain_service.dart';
 
 // ─── Result models ────────────────────────────────────────────────────────────
 

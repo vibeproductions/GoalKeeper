@@ -1,7 +1,7 @@
 // lib/services/ics_parser.dart
 // ICS calendar file parser — translated from Swift ICSParser struct
 
-import 'package:goalkeeper_flutter/models/models.dart';
+import 'package:goalkeeper/models/models.dart';
 
 class ICSParser {
   static (List<CalendarEvent>, String) parse(String content) {

@@ -3,9 +3,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:goalkeeper_flutter/store/goal_store.dart';
-import 'package:goalkeeper_flutter/models/models.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
+import 'package:goalkeeper/store/goal_store.dart';
+import 'package:goalkeeper/models/models.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
 
 class FullCalendarView extends StatefulWidget {
   const FullCalendarView({super.key});

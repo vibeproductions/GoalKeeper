@@ -2,9 +2,9 @@
 // Chat with Claude about a specific goal — Flutter version
 
 import 'package:flutter/material.dart';
-import 'package:goalkeeper_flutter/models/models.dart';
-import 'package:goalkeeper_flutter/services/anthropic_service.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
+import 'package:goalkeeper/models/models.dart';
+import 'package:goalkeeper/services/anthropic_service.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
 
 // ─── Chat message model ───────────────────────────────────────────────────────
 

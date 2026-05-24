@@ -4,10 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:goalkeeper_flutter/store/goal_store.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
-import 'package:goalkeeper_flutter/views/main_scaffold.dart';
-import 'package:goalkeeper_flutter/services/keychain_service.dart';
+import 'package:goalkeeper/store/goal_store.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
+import 'package:goalkeeper/views/main_scaffold.dart';
+import 'package:goalkeeper/services/keychain_service.dart';
 
 // Global scale notifier — updated from Settings, rebuilds entire app
 final ValueNotifier<double> appScale = ValueNotifier(1.0);

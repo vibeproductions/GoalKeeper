@@ -4,10 +4,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:goalkeeper_flutter/store/goal_store.dart';
-import 'package:goalkeeper_flutter/models/models.dart';
-import 'package:goalkeeper_flutter/services/ics_parser.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
+import 'package:goalkeeper/store/goal_store.dart';
+import 'package:goalkeeper/models/models.dart';
+import 'package:goalkeeper/services/ics_parser.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
 
 class ImportCalendarView extends StatefulWidget {
   const ImportCalendarView({super.key});

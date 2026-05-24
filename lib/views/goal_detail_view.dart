@@ -3,12 +3,12 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:goalkeeper_flutter/store/goal_store.dart';
-import 'package:goalkeeper_flutter/models/models.dart';
-import 'package:goalkeeper_flutter/services/anthropic_service.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
-import 'package:goalkeeper_flutter/widgets/progress_ring.dart';
-import 'package:goalkeeper_flutter/views/goal_chat_view.dart';
+import 'package:goalkeeper/store/goal_store.dart';
+import 'package:goalkeeper/models/models.dart';
+import 'package:goalkeeper/services/anthropic_service.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
+import 'package:goalkeeper/widgets/progress_ring.dart';
+import 'package:goalkeeper/views/goal_chat_view.dart';
 
 class GoalDetailView extends StatefulWidget {
   final Goal goal;

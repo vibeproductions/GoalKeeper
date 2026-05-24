@@ -1,8 +1,8 @@
 // lib/views/study_guide_view.dart
 
 import 'package:flutter/material.dart';
-import 'package:goalkeeper_flutter/models/models.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
+import 'package:goalkeeper/models/models.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
 
 class StudyGuideDialog extends StatefulWidget {
   final StudyGuide guide;

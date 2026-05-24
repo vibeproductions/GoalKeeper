@@ -4,7 +4,7 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:goalkeeper_flutter/models/models.dart';
+import 'package:goalkeeper/models/models.dart';
 import 'package:flutter/material.dart';
 
 // Detail panel selection — equivalent to DetailSelection enum in Swift

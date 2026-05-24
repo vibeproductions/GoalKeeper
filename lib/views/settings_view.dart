@@ -5,10 +5,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:goalkeeper_flutter/main.dart';
-import 'package:goalkeeper_flutter/services/keychain_service.dart';
-import 'package:goalkeeper_flutter/services/update_service.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
+import 'package:goalkeeper/main.dart';
+import 'package:goalkeeper/services/keychain_service.dart';
+import 'package:goalkeeper/services/update_service.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
 
 class SettingsView extends StatefulWidget {
   const SettingsView({super.key});

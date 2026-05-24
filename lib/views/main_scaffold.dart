@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:provider/provider.dart';
-import 'package:goalkeeper_flutter/store/goal_store.dart';
-import 'package:goalkeeper_flutter/theme/app_theme.dart';
-import 'package:goalkeeper_flutter/views/sidebar_view.dart';
-import 'package:goalkeeper_flutter/views/calendar_dashboard_view.dart';
-import 'package:goalkeeper_flutter/views/goal_detail_view.dart';
-import 'package:goalkeeper_flutter/views/schedule_detail_view.dart';
-import 'package:goalkeeper_flutter/views/calendar_event_detail_view.dart';
-import 'package:goalkeeper_flutter/views/add_goal_view.dart';
-import 'package:goalkeeper_flutter/views/import_schedule_view.dart';
-import 'package:goalkeeper_flutter/views/import_calendar_view.dart';
-import 'package:goalkeeper_flutter/views/settings_view.dart';
+import 'package:goalkeeper/store/goal_store.dart';
+import 'package:goalkeeper/theme/app_theme.dart';
+import 'package:goalkeeper/views/sidebar_view.dart';
+import 'package:goalkeeper/views/calendar_dashboard_view.dart';
+import 'package:goalkeeper/views/goal_detail_view.dart';
+import 'package:goalkeeper/views/schedule_detail_view.dart';
+import 'package:goalkeeper/views/calendar_event_detail_view.dart';
+import 'package:goalkeeper/views/add_goal_view.dart';
+import 'package:goalkeeper/views/import_schedule_view.dart';
+import 'package:goalkeeper/views/import_calendar_view.dart';
+import 'package:goalkeeper/views/settings_view.dart';
 
 // Intent for ⌘, shortcut
 class _OpenSettingsIntent extends Intent {
