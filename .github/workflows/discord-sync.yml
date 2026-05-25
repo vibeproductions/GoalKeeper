@@ -19,12 +19,16 @@ jobs:
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           commitMode: true
+          # Explicitly tell it to find the last tag using 'sort'
           configurationJson: |
             {
+              "tag_resolver": {
+                "method": "sort"
+              },
               "template": "#{{CHANGELOG}}",
               "categories": [
                 {
-                  "title": "## Changes in this release",
+                  "title": "## 📝 Changes in this release",
                   "labels": ["*"]
                 }
               ]
