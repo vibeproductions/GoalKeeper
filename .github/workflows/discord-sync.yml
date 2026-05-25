@@ -7,25 +7,24 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      # 1. This step downloads your code history so the builder can see the commits
+      # 1. Download the full git history so we can see the commits
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # 2. This step generates the list of changes
+      # 2. Build the list of changes using Commit Mode
       - name: Build Changelog from Commits
         id: build_changelog
         uses: mikepenz/release-changelog-builder-action@v4
         with:
-          # Explicitly force commit mode before reading JSON
-          mode: 'COMMIT' 
+          commitMode: true
           configurationJson: |
             {
               "template": "#{{CHANGELOG}}",
               "categories": [
                 {
-                  "title": "## 📝 Changes",
+                  "title": "## Changes in this release",
                   "labels": ["*"]
                 }
               ]
@@ -33,14 +32,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 3. This step sends the formatted list to Discord
+      # 3. Send the list to your Discord channel
       - name: Send Release to Discord
         run: |
+          # Use a heredoc to handle multi-line text safely
           cat << 'EOF' > changelog.txt
           ${{ steps.build_changelog.outputs.changelog }}
           EOF
           
           CONTENT=$(cat changelog.txt)
+          
+          # Escape any double quotes in commit messages so they don't break the JSON
           CLEAN_CONTENT=$(echo "$CONTENT" | sed 's/"/\\"/g')
 
           curl -H "Content-Type: application/json" \
