@@ -7,7 +7,7 @@ jobs:
   notify:
     runs-on: ubuntu-latest
     steps:
-      # 1. Download the full git history so we can see the commits
+      # 1. Download the full git history so it can see the commits
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
