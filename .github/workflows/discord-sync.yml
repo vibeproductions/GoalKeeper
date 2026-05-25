@@ -6,41 +6,42 @@ on:
 jobs:
   notify:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Generate Commit Log
-        id: changelog
-        uses: metcalfc/changelog-generator@v4.3.1
-        with:
-          myToken: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Update GitHub Release Page
-        uses: softprops/action-gh-release@v1
-        with:
-          body: |
-            ## Changes in this release
-            ${{ steps.changelog.outputs.changelog }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Send to Discord
+      - name: Get Commits and Sanitize
+        id: get_commits
         run: |
-          # Use a variable for the content and clean up quotes
-          CONTENT="## Changes in this release\n${{ steps.changelog.outputs.changelog }}"
-          CLEAN_CONTENT=$(echo "$CONTENT" | sed 's/"/\\"/g')
+          LATEST_TAG=${{ github.event.release.tag_name }}
+          PREVIOUS_TAG=$(git describe --abbrev=0 --tags $LATEST_TAG^ 2>/dev/null || echo "")
+          
+          if [ -z "$PREVIOUS_TAG" ]; then
+            COMMITS=$(git log -n 10 --pretty=format:"- %s")
+          else
+            COMMITS=$(git log $PREVIOUS_TAG..$LATEST_TAG --pretty=format:"- %s")
+          fi
+          
+          # Use printf to safely pass the raw commit string to jq
+          JSON_COMMITS=$(printf '%s' "$COMMITS" | jq -R -s '.')
+          
+          # Quoted GITHUB_OUTPUT for maximum safety
+          echo "list=$JSON_COMMITS" >> "$GITHUB_OUTPUT"
 
-          curl -H "Content-Type: application/json" \
-          -X POST -d "{
-            \"embeds\": [{
-              \"title\": \"New Update: ${{ github.event.release.name }}\",
-              \"url\": \"${{ github.event.release.html_url }}\",
-              \"description\": \"$CLEAN_CONTENT\",
-              \"color\": 3447003
-            }]
-          }" ${{ secrets.DISCORD_WEBHOOK_URL }}
+      - name: Post to Discord
+        run: |
+          # Build the payload using JQ
+          PAYLOAD=$(jq -n \
+            --arg title "New Update: ${{ github.event.release.name }}" \
+            --argjson desc '${{ steps.get_commits.outputs.list }}' \
+            --arg url "${{ github.event.release.html_url }}" \
+            '{embeds: [{title: $title, description: $desc, url: $url, color: 3447003}]}')
+
+          # Use --fail-with-body to catch Discord errors visibly
+          curl --fail-with-body \
+            -H "Content-Type: application/json" \
+            -X POST \
+            -d "$PAYLOAD" \
+            "${{ secrets.DISCORD_WEBHOOK_URL }}"
