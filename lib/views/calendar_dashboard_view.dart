@@ -43,8 +43,8 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
         ),
         child: Row(
           children: [
-            _tab_('Month',    Icons.calendar_month_rounded, 0),
-            _tab_('Upcoming', Icons.access_time_rounded,    1),
+            _tab_('Month', Icons.calendar_month_rounded, 0),
+            _tab_('Upcoming', Icons.access_time_rounded, 1),
           ],
         ),
       );
@@ -53,6 +53,7 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
     final active = _tab == idx;
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => setState(() => _tab = idx),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -62,13 +63,17 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(icon, size: 13,
-                      color: active ? AppColors.accent : AppColors.textSecondary),
+                  Icon(icon,
+                      size: 13,
+                      color:
+                          active ? AppColors.accent : AppColors.textSecondary),
                   const SizedBox(width: 5),
                   Text(label,
                       style: AppText.body(12,
                           weight: active ? FontWeight.w600 : FontWeight.w400,
-                          color: active ? AppColors.accent : AppColors.textSecondary)),
+                          color: active
+                              ? AppColors.accent
+                              : AppColors.textSecondary)),
                 ],
               ),
             ),
@@ -100,10 +105,30 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
   }
 
   Widget get _monthHeader {
-    final months = ['January','February','March','April','May','June',
-                    'July','August','September','October','November','December'];
-    final days   = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    final now    = DateTime.now();
+    final months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    final days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ];
+    final now = DateTime.now();
     return Row(
       children: [
         Expanded(
@@ -113,24 +138,30 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
               Text('${months[_currentMonth.month - 1]} ${_currentMonth.year}',
                   style: AppText.display(22, weight: FontWeight.w700)),
               const SizedBox(height: 2),
-              Text('${days[now.weekday % 7]}, ${months[now.month - 1]} ${now.day}',
+              Text(
+                  '${days[now.weekday % 7]}, ${months[now.month - 1]} ${now.day}',
                   style: AppText.body(11, color: AppColors.textSecondary)),
             ],
           ),
         ),
         // Month nav
         Row(children: [
-          _navBtn(Icons.chevron_left, () => setState(() =>
-              _currentMonth = DateTime(_currentMonth.year, _currentMonth.month - 1))),
+          _navBtn(
+              Icons.chevron_left,
+              () => setState(() => _currentMonth =
+                  DateTime(_currentMonth.year, _currentMonth.month - 1))),
           const SizedBox(width: 4),
-          _navBtn(Icons.chevron_right, () => setState(() =>
-              _currentMonth = DateTime(_currentMonth.year, _currentMonth.month + 1))),
+          _navBtn(
+              Icons.chevron_right,
+              () => setState(() => _currentMonth =
+                  DateTime(_currentMonth.year, _currentMonth.month + 1))),
         ]),
       ],
     );
   }
 
   Widget _navBtn(IconData icon, VoidCallback onTap) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: onTap,
         child: Container(
           padding: const EdgeInsets.all(6),
@@ -157,7 +188,11 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
             ring: Stack(
               alignment: Alignment.center,
               children: [
-                ProgressRing(progress: avg, color: AppColors.accent, strokeWidth: 8, size: 52),
+                ProgressRing(
+                    progress: avg,
+                    color: AppColors.accent,
+                    strokeWidth: 8,
+                    size: 52),
                 Text('${(avg * 100).toInt()}%',
                     style: AppText.mono(11, weight: FontWeight.w700)),
               ],
@@ -165,14 +200,17 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
             label: 'Overall',
           ),
           ...store.activeGoals.take(3).map((goal) => GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => store.selectGoal(goal.id),
                 child: _ringCard(
                   ring: Stack(
                     alignment: Alignment.center,
                     children: [
                       ProgressRing(
-                          progress: goal.progress, color: goal.type.color,
-                          strokeWidth: 8, size: 52),
+                          progress: goal.progress,
+                          color: goal.type.color,
+                          strokeWidth: 8,
+                          size: 52),
                       Icon(goal.type.icon, size: 13, color: goal.type.color),
                     ],
                   ),
@@ -186,8 +224,11 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
     );
   }
 
-  Widget _ringCard({required Widget ring, required String label,
-      bool selected = false, Color? borderColor}) =>
+  Widget _ringCard(
+          {required Widget ring,
+          required String label,
+          bool selected = false,
+          Color? borderColor}) =>
       Container(
         margin: const EdgeInsets.only(right: 10),
         padding: const EdgeInsets.all(10),
@@ -217,19 +258,19 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
 
   // ── Calendar grid ──────────────────────────────────────────────────────────
   Widget _calendarGrid(GoalStore store) {
-    final goalMap     = store.goalsForMonth(_currentMonth);
+    final goalMap = store.goalsForMonth(_currentMonth);
     final scheduleMap = store.scheduleForMonth(_currentMonth);
-    final eventMap    = store.eventsForMonth(_currentMonth);
+    final eventMap = store.eventsForMonth(_currentMonth);
 
-    final firstDay  = DateTime(_currentMonth.year, _currentMonth.month, 1);
-    final daysInMonth = DateUtils.getDaysInMonth(
-        _currentMonth.year, _currentMonth.month);
+    final firstDay = DateTime(_currentMonth.year, _currentMonth.month, 1);
+    final daysInMonth =
+        DateUtils.getDaysInMonth(_currentMonth.year, _currentMonth.month);
     final startOffset = firstDay.weekday % 7; // Sunday = 0
 
     final cells = <DateTime?>[
       ...List.filled(startOffset, null),
-      ...List.generate(daysInMonth, (i) =>
-          DateTime(_currentMonth.year, _currentMonth.month, i + 1)),
+      ...List.generate(daysInMonth,
+          (i) => DateTime(_currentMonth.year, _currentMonth.month, i + 1)),
     ];
     // Pad to complete weeks
     while (cells.length % 7 != 0) cells.add(null);
@@ -244,75 +285,100 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
         children: [
           // Day labels
           Row(
-            children: ['Su','Mo','Tu','We','Th','Fr','Sa'].map((d) =>
-                Expanded(
-                  child: Text(d,
-                      style: AppText.body(10, weight: FontWeight.w500,
-                          color: AppColors.textTertiary),
-                      textAlign: TextAlign.center),
-                )).toList(),
+            children: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
+                .map((d) => Expanded(
+                      child: Text(d,
+                          style: AppText.body(10,
+                              weight: FontWeight.w500,
+                              color: AppColors.textTertiary),
+                          textAlign: TextAlign.center),
+                    ))
+                .toList(),
           ),
           const SizedBox(height: 4),
           // Day cells
-          ...List.generate(cells.length ~/ 7, (row) => Row(
-            children: List.generate(7, (col) {
-              final date = cells[row * 7 + col];
-              if (date == null) return const Expanded(child: SizedBox(height: 36));
-              final isToday    = DateUtils.isSameDay(date, DateTime.now());
-              final isSelected = DateUtils.isSameDay(date, store.selectedDate);
-              final day        = DateTime(date.year, date.month, date.day);
-              final dots = [
-                ...((goalMap[day] ?? []).take(2).map((g) => g.type.color)),
-                ...((scheduleMap[day] ?? []).take(2).map((i) => i.type.color)),
-                ...((eventMap[day] ?? []).take(1).map((e) => e.color.color)),
-              ];
+          ...List.generate(
+              cells.length ~/ 7,
+              (row) => Row(
+                    children: List.generate(7, (col) {
+                      final date = cells[row * 7 + col];
+                      if (date == null)
+                        return const Expanded(child: SizedBox(height: 36));
+                      final isToday = DateUtils.isSameDay(date, DateTime.now());
+                      final isSelected =
+                          DateUtils.isSameDay(date, store.selectedDate);
+                      final day = DateTime(date.year, date.month, date.day);
+                      final dots = [
+                        ...((goalMap[day] ?? [])
+                            .take(2)
+                            .map((g) => g.type.color)),
+                        ...((scheduleMap[day] ?? [])
+                            .take(2)
+                            .map((i) => i.type.color)),
+                        ...((eventMap[day] ?? [])
+                            .take(1)
+                            .map((e) => e.color.color)),
+                      ];
 
-              return Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    store.selectedDate = date;
-                    (context as Element).markNeedsBuild();
-                  },
-                  child: SizedBox(
-                    height: 36,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 24, height: 24,
-                          decoration: BoxDecoration(
-                            color: isToday
-                                ? AppColors.accent
-                                : isSelected
-                                    ? Colors.white.withOpacity(0.12)
-                                    : Colors.transparent,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '${date.day}',
-                              style: AppText.body(12,
-                                  weight: isToday ? FontWeight.w700 : FontWeight.w400,
-                                  color: isToday ? Colors.black : AppColors.textPrimary),
+                      return Expanded(
+                        child: GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () {
+                            store.selectedDate = date;
+                            (context as Element).markNeedsBuild();
+                          },
+                          child: SizedBox(
+                            height: 36,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 24,
+                                  height: 24,
+                                  decoration: BoxDecoration(
+                                    color: isToday
+                                        ? AppColors.accent
+                                        : isSelected
+                                            ? Colors.white.withOpacity(0.12)
+                                            : Colors.transparent,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      '${date.day}',
+                                      style: AppText.body(12,
+                                          weight: isToday
+                                              ? FontWeight.w700
+                                              : FontWeight.w400,
+                                          color: isToday
+                                              ? Colors.black
+                                              : AppColors.textPrimary),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 2),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: dots
+                                      .take(4)
+                                      .map((c) => Container(
+                                            width: 3.5,
+                                            height: 3.5,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 0.5),
+                                            decoration: BoxDecoration(
+                                                color: c,
+                                                shape: BoxShape.circle),
+                                          ))
+                                      .toList(),
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        const SizedBox(height: 2),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: dots.take(4).map((c) => Container(
-                            width: 3.5, height: 3.5,
-                            margin: const EdgeInsets.symmetric(horizontal: 0.5),
-                            decoration: BoxDecoration(color: c, shape: BoxShape.circle),
-                          )).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            }),
-          )),
+                      );
+                    }),
+                  )),
         ],
       ),
     );
@@ -320,8 +386,7 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
 
   // ── Due this month list ────────────────────────────────────────────────────
   Widget _dueThisMonth(GoalStore store) {
-    final sorted = [...store.goals]
-      ..sort((a, b) {
+    final sorted = [...store.goals]..sort((a, b) {
         final da = a.dueDate ?? a.createdDate;
         final db = b.dueDate ?? b.createdDate;
         return da.compareTo(db);
@@ -331,14 +396,15 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Due This Month',
-            style: AppText.body(13, weight: FontWeight.w700,
-                color: AppColors.textSecondary)),
+            style: AppText.body(13,
+                weight: FontWeight.w700, color: AppColors.textSecondary)),
         const SizedBox(height: 8),
         if (sorted.isEmpty)
           Text('No goals yet — use the + menu to add one',
               style: AppText.body(12, color: AppColors.textDisabled))
         else
           ...sorted.map((goal) => GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () => store.selectGoal(goal.id),
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 4),
@@ -353,7 +419,8 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
                   child: Row(
                     children: [
                       Container(
-                        width: 8, height: 8,
+                        width: 8,
+                        height: 8,
                         decoration: BoxDecoration(
                             color: goal.type.color, shape: BoxShape.circle),
                       ),
@@ -363,7 +430,8 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(goal.title,
-                                style: AppText.body(12, weight: FontWeight.w500),
+                                style:
+                                    AppText.body(12, weight: FontWeight.w500),
                                 overflow: TextOverflow.ellipsis),
                             if (goal.daysUntilDue != null)
                               Text(
@@ -379,7 +447,9 @@ class _CalendarDashboardViewState extends State<CalendarDashboardView> {
                         ),
                       ),
                       MiniRingView(
-                          progress: goal.progress, color: goal.type.color, size: 24),
+                          progress: goal.progress,
+                          color: goal.type.color,
+                          size: 24),
                     ],
                   ),
                 ),

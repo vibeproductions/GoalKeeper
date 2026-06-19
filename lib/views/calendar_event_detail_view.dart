@@ -12,7 +12,8 @@ class CalendarEventDetailView extends StatefulWidget {
   final CalendarEvent event;
   const CalendarEventDetailView({super.key, required this.event});
   @override
-  State<CalendarEventDetailView> createState() => _CalendarEventDetailViewState();
+  State<CalendarEventDetailView> createState() =>
+      _CalendarEventDetailViewState();
 }
 
 class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
@@ -36,8 +37,8 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
   @override
   Widget build(BuildContext context) {
     final store = context.watch<GoalStore>();
-    final event = store.calendarEvents.firstWhere(
-      (e) => e.id == widget.event.id, orElse: () => widget.event);
+    final event = store.calendarEvents
+        .firstWhere((e) => e.id == widget.event.id, orElse: () => widget.event);
 
     return Container(
       color: AppColors.background,
@@ -72,11 +73,16 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
         ),
         child: Row(
           children: [
-            Container(width: 10, height: 10,
-                decoration: BoxDecoration(color: event.color.color, shape: BoxShape.circle)),
+            Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                    color: event.color.color, shape: BoxShape.circle)),
             const SizedBox(width: 8),
-            Text(event.source == CalendarEventSource.ics
-                ? 'IMPORTED EVENT' : 'MANUAL EVENT',
+            Text(
+                event.source == CalendarEventSource.ics
+                    ? 'IMPORTED EVENT'
+                    : 'MANUAL EVENT',
                 style: AppText.label(10, color: event.color.color)),
             const Spacer(),
             IconButton(
@@ -102,17 +108,22 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
-              Container(width: 12, height: 12,
+              Container(
+                  width: 12,
+                  height: 12,
                   decoration: BoxDecoration(
                       color: event.color.color, shape: BoxShape.circle)),
               const SizedBox(width: 8),
-              Text(event.source == CalendarEventSource.ics
-                  ? 'IMPORTED EVENT' : 'MANUAL EVENT',
+              Text(
+                  event.source == CalendarEventSource.ics
+                      ? 'IMPORTED EVENT'
+                      : 'MANUAL EVENT',
                   style: AppText.label(10, color: event.color.color)),
               if (event.calendarName.isNotEmpty) ...[
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                   decoration: BoxDecoration(
                     color: Colors.white.withOpacity(0.06),
                     borderRadius: BorderRadius.circular(6),
@@ -123,15 +134,16 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
               ],
             ]),
             const SizedBox(height: 12),
-            Text(event.title, style: AppText.display(24, weight: FontWeight.w700)),
+            Text(event.title,
+                style: AppText.display(24, weight: FontWeight.w700)),
             const SizedBox(height: 8),
             Row(children: [
               Icon(Icons.calendar_today_rounded,
                   size: 13, color: event.color.color),
               const SizedBox(width: 6),
               Text(_dateRangeString(event),
-                  style: AppText.body(13, weight: FontWeight.w500,
-                      color: AppColors.textSecondary)),
+                  style: AppText.body(13,
+                      weight: FontWeight.w500, color: AppColors.textSecondary)),
             ]),
             if (event.notes.isNotEmpty) ...[
               const SizedBox(height: 10),
@@ -150,13 +162,13 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
       );
 
   Widget _countdownCard(CalendarEvent event) {
-    final diff       = event.startDate.difference(_now);
-    final totalSecs  = diff.inSeconds.clamp(0, double.maxFinite.toInt());
-    final days       = totalSecs ~/ 86400;
-    final hours      = (totalSecs % 86400) ~/ 3600;
-    final minutes    = (totalSecs % 3600) ~/ 60;
-    final seconds    = totalSecs % 60;
-    final pulsing    = _now.second % 2 == 0;
+    final diff = event.startDate.difference(_now);
+    final totalSecs = diff.inSeconds.clamp(0, double.maxFinite.toInt());
+    final days = totalSecs ~/ 86400;
+    final hours = (totalSecs % 86400) ~/ 3600;
+    final minutes = (totalSecs % 3600) ~/ 60;
+    final seconds = totalSecs % 60;
+    final pulsing = _now.second % 2 == 0;
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -168,12 +180,15 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
       child: Column(
         children: [
           Row(children: [
-            Text('Countdown', style: AppText.display(13, weight: FontWeight.w700)),
+            Text('Countdown',
+                style: AppText.display(13, weight: FontWeight.w700)),
             const Spacer(),
             AnimatedOpacity(
               opacity: pulsing ? 1.0 : 0.3,
               duration: const Duration(milliseconds: 500),
-              child: Container(width: 6, height: 6,
+              child: Container(
+                  width: 6,
+                  height: 6,
                   decoration: const BoxDecoration(
                       color: AppColors.success, shape: BoxShape.circle)),
             ),
@@ -209,8 +224,8 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
       );
 
   Widget get _separator => Text(':',
-      style: AppText.mono(28, weight: FontWeight.w700,
-          color: AppColors.textDisabled));
+      style: AppText.mono(28,
+          weight: FontWeight.w700, color: AppColors.textDisabled));
 
   Widget _detailsCard(CalendarEvent event) => Container(
         decoration: BoxDecoration(
@@ -220,14 +235,19 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
         child: Column(children: [
           _row('Start', _fullDate(event.startDate), event.color.color),
           if (event.endDate != null) ...[
-            const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+            const Divider(
+                height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
             _row('End', _fullDate(event.endDate!), AppColors.textSecondary),
           ],
-          const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
-          _row('All Day', event.isAllDay ? 'Yes' : 'No', AppColors.textSecondary),
-          const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+          const Divider(
+              height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+          _row('All Day', event.isAllDay ? 'Yes' : 'No',
+              AppColors.textSecondary),
+          const Divider(
+              height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
           _row('Color', event.color.label, event.color.color),
-          const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+          const Divider(
+              height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
           _row('Source', event.source.name, AppColors.textSecondary),
         ]),
       );
@@ -238,7 +258,8 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
           Text(label, style: AppText.body(12, color: AppColors.textSecondary)),
           const Spacer(),
           Text(value,
-              style: AppText.body(12, weight: FontWeight.w600, color: valueColor)),
+              style:
+                  AppText.body(12, weight: FontWeight.w600, color: valueColor)),
         ]),
       );
 
@@ -250,9 +271,21 @@ class _CalendarEventDetailViewState extends State<CalendarEventDetailView> {
   }
 
   String _fullDate(DateTime d) {
-    const months = ['Jan','Feb','Mar','Apr','May','Jun',
-                    'Jul','Aug','Sep','Oct','Nov','Dec'];
-    const days   = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec'
+    ];
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
     return '${days[d.weekday - 1]}, ${months[d.month - 1]} ${d.day}, ${d.year}';
   }
 }

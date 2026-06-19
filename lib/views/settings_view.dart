@@ -17,12 +17,12 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsViewState extends State<SettingsView> {
-  final _keyCtrl    = TextEditingController();
-  bool  _keyVisible = false;
-  bool  _keySaved   = false;
-  String _model     = 'claude-haiku-4-5';
-  double _scale     = 1.0;
-  bool  _showNotes  = false;
+  final _keyCtrl = TextEditingController();
+  bool _keyVisible = false;
+  bool _keySaved = false;
+  String _model = 'claude-haiku-4-5';
+  double _scale = 1.0;
+  bool _showNotes = false;
 
   final _updater = UpdateService();
 
@@ -33,7 +33,7 @@ class _SettingsViewState extends State<SettingsView> {
   }
 
   Future<void> _load() async {
-    final key   = await KeychainService.loadApiKey();
+    final key = await KeychainService.loadApiKey();
     final model = await KeychainService.selectedModel;
     final scale = await KeychainService.loadDisplayScale();
     if (mounted) {
@@ -51,7 +51,8 @@ class _SettingsViewState extends State<SettingsView> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.sidebarBg,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: SizedBox(
         width: 480,
         height: _showNotes ? 680 : 640,
@@ -90,7 +91,8 @@ class _SettingsViewState extends State<SettingsView> {
           Text('Settings', style: AppText.display(18, weight: FontWeight.w700)),
           const Spacer(),
           IconButton(
-            icon: const Icon(Icons.close_rounded, color: AppColors.textTertiary),
+            icon:
+                const Icon(Icons.close_rounded, color: AppColors.textTertiary),
             onPressed: () => Navigator.pop(context),
           ),
         ]),
@@ -141,8 +143,10 @@ class _SettingsViewState extends State<SettingsView> {
                 ),
               ),
               IconButton(
-                icon: Icon(_keyVisible ? Icons.visibility_off : Icons.visibility,
-                    size: 16, color: AppColors.textTertiary),
+                icon: Icon(
+                    _keyVisible ? Icons.visibility_off : Icons.visibility,
+                    size: 16,
+                    color: AppColors.textTertiary),
                 onPressed: () => setState(() => _keyVisible = !_keyVisible),
               ),
             ]),
@@ -150,6 +154,7 @@ class _SettingsViewState extends State<SettingsView> {
           const SizedBox(height: 12),
           Row(children: [
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
                 await KeychainService.saveApiKey(_keyCtrl.text);
                 setState(() => _keySaved = true);
@@ -157,22 +162,29 @@ class _SettingsViewState extends State<SettingsView> {
                 if (mounted) setState(() => _keySaved = false);
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 decoration: BoxDecoration(
                   color: _keySaved ? AppColors.success : AppColors.accent,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(children: [
-                  Icon(_keySaved ? Icons.check_circle_rounded : Icons.key_rounded,
-                      size: 13, color: Colors.black),
+                  Icon(
+                      _keySaved
+                          ? Icons.check_circle_rounded
+                          : Icons.key_rounded,
+                      size: 13,
+                      color: Colors.black),
                   const SizedBox(width: 6),
                   Text(_keySaved ? 'Saved!' : 'Save Key',
-                      style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                      style: AppText.body(13,
+                          weight: FontWeight.w600, color: Colors.black)),
                 ]),
               ),
             ),
             const SizedBox(width: 12),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () async {
                 await KeychainService.deleteApiKey();
                 _keyCtrl.clear();
@@ -182,7 +194,9 @@ class _SettingsViewState extends State<SettingsView> {
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () => launchUrl(Uri.parse('https://console.anthropic.com')),
+              behavior: HitTestBehavior.opaque,
+              onTap: () =>
+                  launchUrl(Uri.parse('https://console.anthropic.com')),
               child: Text('Get a free key →',
                   style: AppText.body(12, color: AppColors.accent)),
             ),
@@ -199,17 +213,30 @@ class _SettingsViewState extends State<SettingsView> {
           Text('Choose the Claude model for analyzing your goals.',
               style: AppText.body(13, color: AppColors.textSecondary)),
           const SizedBox(height: 12),
-          _modelOption('claude-haiku-4-5',  'Haiku',  'Fastest · Cheapest · Great for most goals',  'Recommended', AppColors.accent),
+          _modelOption(
+              'claude-haiku-4-5',
+              'Haiku',
+              'Fastest · Cheapest · Great for most goals',
+              'Recommended',
+              AppColors.accent),
           const SizedBox(height: 6),
-          _modelOption('claude-sonnet-4-6', 'Sonnet', 'Balanced speed and quality',                  '~5× more',    AppColors.warning),
+          _modelOption('claude-sonnet-4-6', 'Sonnet',
+              'Balanced speed and quality', '~5× more', AppColors.warning),
           const SizedBox(height: 6),
-          _modelOption('claude-opus-4-6',   'Opus',   'Most detailed · Best for complex goals',      '~25× more',   AppColors.danger),
+          _modelOption(
+              'claude-opus-4-6',
+              'Opus',
+              'Most detailed · Best for complex goals',
+              '~25× more',
+              AppColors.danger),
         ],
       );
 
-  Widget _modelOption(String id, String name, String desc, String badge, Color badgeColor) {
+  Widget _modelOption(
+      String id, String name, String desc, String badge, Color badgeColor) {
     final selected = _model == id;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () async {
         await KeychainService.setSelectedModel(id);
         setState(() => _model = id);
@@ -222,30 +249,40 @@ class _SettingsViewState extends State<SettingsView> {
               : Colors.white.withValues(alpha: 0.04),
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
-            color: selected
-                ? AppColors.accent.withValues(alpha: 0.3)
-                : Colors.white.withValues(alpha: 0.06)),
+              color: selected
+                  ? AppColors.accent.withValues(alpha: 0.3)
+                  : Colors.white.withValues(alpha: 0.06)),
         ),
         child: Row(children: [
           Container(
-            width: 18, height: 18,
+            width: 18,
+            height: 18,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
-                color: selected ? AppColors.accent : Colors.white.withValues(alpha: 0.2),
-                width: 2),
+                  color: selected
+                      ? AppColors.accent
+                      : Colors.white.withValues(alpha: 0.2),
+                  width: 2),
             ),
             child: selected
-                ? Center(child: Container(width: 10, height: 10,
-                    decoration: const BoxDecoration(
-                        color: AppColors.accent, shape: BoxShape.circle)))
+                ? Center(
+                    child: Container(
+                        width: 10,
+                        height: 10,
+                        decoration: const BoxDecoration(
+                            color: AppColors.accent, shape: BoxShape.circle)))
                 : null,
           ),
           const SizedBox(width: 12),
-          Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(name, style: AppText.body(13, weight: FontWeight.w600)),
-            Text(desc, style: AppText.body(11, color: AppColors.textSecondary)),
-          ])),
+          Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                Text(name, style: AppText.body(13, weight: FontWeight.w600)),
+                Text(desc,
+                    style: AppText.body(11, color: AppColors.textSecondary)),
+              ])),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
             decoration: BoxDecoration(
@@ -253,7 +290,8 @@ class _SettingsViewState extends State<SettingsView> {
               borderRadius: BorderRadius.circular(6),
             ),
             child: Text(badge,
-                style: AppText.body(10, weight: FontWeight.w700, color: badgeColor)),
+                style: AppText.body(10,
+                    weight: FontWeight.w700, color: badgeColor)),
           ),
         ]),
       ),
@@ -272,7 +310,8 @@ class _SettingsViewState extends State<SettingsView> {
           ),
           const SizedBox(height: 14),
           Row(children: [
-            const Icon(Icons.text_fields_rounded, size: 13, color: AppColors.textTertiary),
+            const Icon(Icons.text_fields_rounded,
+                size: 13, color: AppColors.textTertiary),
             Expanded(
               child: Slider(
                 value: _scale,
@@ -287,21 +326,26 @@ class _SettingsViewState extends State<SettingsView> {
                 },
               ),
             ),
-            const Icon(Icons.text_fields_rounded, size: 20, color: AppColors.textTertiary),
+            const Icon(Icons.text_fields_rounded,
+                size: 20, color: AppColors.textTertiary),
           ]),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Smaller', style: AppText.body(10, color: AppColors.textTertiary)),
+              Text('Smaller',
+                  style: AppText.body(10, color: AppColors.textTertiary)),
               Text(
                 '${(_scale * 100).toInt()}%',
-                style: AppText.body(12, weight: FontWeight.w600, color: AppColors.accent),
+                style: AppText.body(12,
+                    weight: FontWeight.w600, color: AppColors.accent),
               ),
-              Text('Larger', style: AppText.body(10, color: AppColors.textTertiary)),
+              Text('Larger',
+                  style: AppText.body(10, color: AppColors.textTertiary)),
             ],
           ),
           const SizedBox(height: 8),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () async {
               await KeychainService.setDisplayScale(1.0);
               appScale.value = 1.0;
@@ -321,16 +365,19 @@ class _SettingsViewState extends State<SettingsView> {
           const SizedBox(height: 12),
           Row(children: [
             Container(
-              width: 48, height: 48,
+              width: 48,
+              height: 48,
               decoration: BoxDecoration(
                 color: AppColors.accent.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const Icon(Icons.shield_rounded, size: 22, color: AppColors.accent),
+              child: const Icon(Icons.shield_rounded,
+                  size: 22, color: AppColors.accent),
             ),
             const SizedBox(width: 14),
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('GoalKeeper', style: AppText.body(14, weight: FontWeight.w600)),
+              Text('GoalKeeper',
+                  style: AppText.body(14, weight: FontWeight.w600)),
               Text('Version ${_updater.currentVersion}',
                   style: AppText.body(12, color: AppColors.textSecondary)),
             ]),
@@ -341,9 +388,11 @@ class _SettingsViewState extends State<SettingsView> {
           _updateAction,
           const SizedBox(height: 10),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => setState(() => _showNotes = !_showNotes),
             child: Row(children: [
-              const Icon(Icons.description_rounded, size: 13, color: AppColors.accent),
+              const Icon(Icons.description_rounded,
+                  size: 13, color: AppColors.accent),
               const SizedBox(width: 6),
               Text(
                 _showNotes ? 'Hide Release Notes' : 'View Release Notes',
@@ -357,11 +406,15 @@ class _SettingsViewState extends State<SettingsView> {
   Widget get _updateBadge {
     switch (_updater.state.kind) {
       case UpdateStateKind.checking:
-        return const SizedBox(width: 16, height: 16,
-            child: CircularProgressIndicator(strokeWidth: 1.5, color: AppColors.accent));
+        return const SizedBox(
+            width: 16,
+            height: 16,
+            child: CircularProgressIndicator(
+                strokeWidth: 1.5, color: AppColors.accent));
       case UpdateStateKind.upToDate:
         return Row(children: [
-          const Icon(Icons.check_circle_rounded, size: 13, color: AppColors.success),
+          const Icon(Icons.check_circle_rounded,
+              size: 13, color: AppColors.success),
           const SizedBox(width: 5),
           Text('Up to date', style: AppText.body(12, color: AppColors.success)),
         ]);
@@ -373,20 +426,25 @@ class _SettingsViewState extends State<SettingsView> {
             borderRadius: BorderRadius.circular(6),
           ),
           child: Text('v${_updater.state.manifest!.version} available',
-              style: AppText.body(11, weight: FontWeight.w700, color: Colors.black)),
+              style: AppText.body(11,
+                  weight: FontWeight.w700, color: Colors.black)),
         );
       case UpdateStateKind.downloading:
-        return SizedBox(width: 80,
+        return SizedBox(
+            width: 80,
             child: LinearProgressIndicator(
-                value: _updater.state.downloadProgress, color: AppColors.accent));
+                value: _updater.state.downloadProgress,
+                color: AppColors.accent));
       case UpdateStateKind.readyToInstall:
         return Row(children: [
-          const Icon(Icons.check_circle_rounded, size: 13, color: AppColors.success),
+          const Icon(Icons.check_circle_rounded,
+              size: 13, color: AppColors.success),
           const SizedBox(width: 5),
           Text('Downloaded', style: AppText.body(12, color: AppColors.success)),
         ]);
       case UpdateStateKind.error:
-        return const Icon(Icons.error_rounded, size: 13, color: AppColors.danger);
+        return const Icon(Icons.error_rounded,
+            size: 13, color: AppColors.danger);
       default:
         return const SizedBox.shrink();
     }
@@ -397,6 +455,7 @@ class _SettingsViewState extends State<SettingsView> {
     switch (state.kind) {
       case UpdateStateKind.available:
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () async {
             await _updater.downloadUpdate(state.manifest!.url);
             if (mounted) setState(() {});
@@ -411,12 +470,14 @@ class _SettingsViewState extends State<SettingsView> {
               const Icon(Icons.download_rounded, size: 13, color: Colors.black),
               const SizedBox(width: 6),
               Text('Download Update',
-                  style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                  style: AppText.body(13,
+                      weight: FontWeight.w600, color: Colors.black)),
             ]),
           ),
         );
       case UpdateStateKind.readyToInstall:
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => _updater.installUpdate(state.zipPath!),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -425,21 +486,25 @@ class _SettingsViewState extends State<SettingsView> {
               borderRadius: BorderRadius.circular(8),
             ),
             child: Row(mainAxisSize: MainAxisSize.min, children: [
-              const Icon(Icons.install_mobile_rounded, size: 13, color: Colors.black),
+              const Icon(Icons.install_mobile_rounded,
+                  size: 13, color: Colors.black),
               const SizedBox(width: 6),
               Text('Install & Quit',
-                  style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                  style: AppText.body(13,
+                      weight: FontWeight.w600, color: Colors.black)),
             ]),
           ),
         );
       case UpdateStateKind.upToDate:
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () async {
             await _updater.checkForUpdates();
             if (mounted) setState(() {});
           },
           child: Row(mainAxisSize: MainAxisSize.min, children: [
-            const Icon(Icons.refresh_rounded, size: 13, color: AppColors.textSecondary),
+            const Icon(Icons.refresh_rounded,
+                size: 13, color: AppColors.textSecondary),
             const SizedBox(width: 5),
             Text('Check Again',
                 style: AppText.body(12, color: AppColors.textSecondary)),
@@ -504,49 +569,57 @@ class _ReleaseNotesSectionState extends State<_ReleaseNotesSection> {
         Row(children: [
           const Icon(Icons.description_rounded, size: 15),
           const SizedBox(width: 8),
-          Text('Release Notes', style: AppText.display(15, weight: FontWeight.w700)),
+          Text('Release Notes',
+              style: AppText.display(15, weight: FontWeight.w700)),
         ]),
         const SizedBox(height: 12),
         if (_loading)
-          const Center(child: CircularProgressIndicator(color: AppColors.accent))
+          const Center(
+              child: CircularProgressIndicator(color: AppColors.accent))
         else if (_releases.isEmpty)
           Text('Could not load releases.',
               style: AppText.body(12, color: AppColors.textSecondary))
         else
           ..._releases.map((r) {
-            final id       = r['id'] as int;
-            final tag      = r['tag_name'] as String;
-            final name     = (r['name'] as String?) ?? tag;
-            final body     = (r['body'] as String?) ?? '';
-            final url      = r['html_url'] as String;
+            final id = r['id'] as int;
+            final tag = r['tag_name'] as String;
+            final name = (r['name'] as String?) ?? tag;
+            final body = (r['body'] as String?) ?? '';
+            final url = r['html_url'] as String;
             final expanded = _expandedId == id;
 
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => setState(() => _expandedId = expanded ? null : id),
               child: Container(
                 margin: const EdgeInsets.only(bottom: 8),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.04),
                   borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.white.withValues(alpha: 0.06)),
+                  border:
+                      Border.all(color: Colors.white.withValues(alpha: 0.06)),
                 ),
                 child: Column(children: [
                   Padding(
                     padding: const EdgeInsets.all(12),
                     child: Row(children: [
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
                           color: AppColors.accent.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(tag,
                             style: AppText.body(12,
-                                weight: FontWeight.w700, color: AppColors.accent)),
+                                weight: FontWeight.w700,
+                                color: AppColors.accent)),
                       ),
                       const SizedBox(width: 10),
-                      Expanded(child: Text(name,
-                          style: AppText.body(13, weight: FontWeight.w600))),
+                      Expanded(
+                          child: Text(name,
+                              style:
+                                  AppText.body(13, weight: FontWeight.w600))),
                       Icon(expanded ? Icons.expand_less : Icons.expand_more,
                           size: 14, color: AppColors.textTertiary),
                     ]),
@@ -561,23 +634,27 @@ class _ReleaseNotesSectionState extends State<_ReleaseNotesSection> {
                           ...body.split('\n').map((line) {
                             line = line.trim();
                             if (line.isEmpty) return const SizedBox(height: 4);
-                            if (line.startsWith('- ') || line.startsWith('* ')) {
+                            if (line.startsWith('- ') ||
+                                line.startsWith('* ')) {
                               return Padding(
                                 padding: const EdgeInsets.only(bottom: 4),
                                 child: Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 4, height: 4,
+                                      width: 4,
+                                      height: 4,
                                       margin: const EdgeInsets.only(top: 6),
                                       decoration: const BoxDecoration(
                                           color: AppColors.accent,
                                           shape: BoxShape.circle),
                                     ),
                                     const SizedBox(width: 8),
-                                    Expanded(child: Text(line.substring(2),
-                                        style: AppText.body(12,
-                                            color: AppColors.textSecondary))),
+                                    Expanded(
+                                        child: Text(line.substring(2),
+                                            style: AppText.body(12,
+                                                color:
+                                                    AppColors.textSecondary))),
                                   ],
                                 ),
                               );
@@ -591,9 +668,11 @@ class _ReleaseNotesSectionState extends State<_ReleaseNotesSection> {
                           }),
                           const SizedBox(height: 6),
                           GestureDetector(
+                            behavior: HitTestBehavior.opaque,
                             onTap: () => launchUrl(Uri.parse(url)),
                             child: Text('View on GitHub →',
-                                style: AppText.body(11, color: AppColors.accent)),
+                                style:
+                                    AppText.body(11, color: AppColors.accent)),
                           ),
                         ],
                       ),

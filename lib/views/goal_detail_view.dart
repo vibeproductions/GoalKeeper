@@ -45,20 +45,20 @@ class _GoalDetailViewState extends State<GoalDetailView> {
             child: _showChat
                 ? GoalChatView(goal: goal)
                 : ListView(
-              padding: const EdgeInsets.all(20),
-              children: [
-                _heroCard(goal),
-                const SizedBox(height: 16),
-                if (goal.aiSummary.isNotEmpty) ...[
-                  _summaryCard(goal),
-                  const SizedBox(height: 16),
-                ],
-                _stepsSection(goal, store),
-                const SizedBox(height: 16),
-                _metaCard(goal),
-                const SizedBox(height: 40),
-              ],
-            ),
+                    padding: const EdgeInsets.all(20),
+                    children: [
+                      _heroCard(goal),
+                      const SizedBox(height: 16),
+                      if (goal.aiSummary.isNotEmpty) ...[
+                        _summaryCard(goal),
+                        const SizedBox(height: 16),
+                      ],
+                      _stepsSection(goal, store),
+                      const SizedBox(height: 16),
+                      _metaCard(goal),
+                      const SizedBox(height: 40),
+                    ],
+                  ),
           ),
         ],
       ),
@@ -81,22 +81,25 @@ class _GoalDetailViewState extends State<GoalDetailView> {
     final active = _showChat == isChat;
     return Expanded(
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => setState(() => _showChat = isChat),
         child: Column(mainAxisSize: MainAxisSize.min, children: [
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 9),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              Icon(icon, size: 12,
+              Icon(icon,
+                  size: 12,
                   color: active ? AppColors.accent : AppColors.textSecondary),
               const SizedBox(width: 5),
               Text(label,
                   style: AppText.body(12,
                       weight: active ? FontWeight.w600 : FontWeight.w400,
-                      color: active ? AppColors.accent : AppColors.textSecondary)),
+                      color:
+                          active ? AppColors.accent : AppColors.textSecondary)),
             ]),
           ),
-          Container(height: 2,
-              color: active ? AppColors.accent : Colors.transparent),
+          Container(
+              height: 2, color: active ? AppColors.accent : Colors.transparent),
         ]),
       ),
     );
@@ -118,13 +121,13 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                 style: AppText.label(10, color: goal.type.color)),
             const Spacer(),
             if (_error != null)
-              Text(_error!,
-                  style: AppText.body(11, color: AppColors.danger)),
+              Text(_error!, style: AppText.body(11, color: AppColors.danger)),
             // Re-analyze
             IconButton(
               icon: _isReanalyzing
                   ? const SizedBox(
-                      width: 14, height: 14,
+                      width: 14,
+                      height: 14,
                       child: CircularProgressIndicator(
                           strokeWidth: 1.5, color: AppColors.accent))
                   : const Icon(Icons.auto_awesome_rounded,
@@ -166,7 +169,8 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                     const SizedBox(height: 4),
                     Text(goal.description,
                         style: AppText.body(12, color: AppColors.textSecondary),
-                        maxLines: 2, overflow: TextOverflow.ellipsis),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis),
                   ],
                   const SizedBox(height: 10),
                   Wrap(
@@ -182,7 +186,9 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                           goal.daysUntilDue! < 0
                               ? '⚠ Overdue ${-goal.daysUntilDue!}d'
                               : '${goal.daysUntilDue}d left',
-                          goal.daysUntilDue! < 0 ? AppColors.danger : AppColors.warning,
+                          goal.daysUntilDue! < 0
+                              ? AppColors.danger
+                              : AppColors.warning,
                         ),
                     ],
                   ),
@@ -265,20 +271,25 @@ class _GoalDetailViewState extends State<GoalDetailView> {
               ),
             )
           else
-            ...goal.steps.asMap().entries.map((e) =>
-                _stepRow(e.value, e.key, goal, store)),
+            ...goal.steps
+                .asMap()
+                .entries
+                .map((e) => _stepRow(e.value, e.key, goal, store)),
         ],
       );
 
   Widget _stepRow(GoalStep step, int index, Goal goal, GoalStore store) {
-    final isCurrent = !step.isCompleted &&
-        goal.steps.take(index).every((s) => s.isCompleted);
+    final isCurrent =
+        !step.isCompleted && goal.steps.take(index).every((s) => s.isCompleted);
     final isExpanded = _expandedSteps.contains(step.id);
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => setState(() {
-        if (isExpanded) _expandedSteps.remove(step.id);
-        else _expandedSteps.add(step.id);
+        if (isExpanded)
+          _expandedSteps.remove(step.id);
+        else
+          _expandedSteps.add(step.id);
       }),
       child: Container(
         margin: const EdgeInsets.only(bottom: 6),
@@ -301,12 +312,16 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                 children: [
                   // Checkbox
                   GestureDetector(
+                    behavior: HitTestBehavior.opaque,
                     onTap: () => store.toggleStep(goal.id, step.id),
                     child: Container(
-                      width: 22, height: 22,
+                      width: 22,
+                      height: 22,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: step.isCompleted ? goal.type.color : Colors.transparent,
+                        color: step.isCompleted
+                            ? goal.type.color
+                            : Colors.transparent,
                         border: Border.all(
                           color: step.isCompleted
                               ? goal.type.color
@@ -315,7 +330,8 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                         ),
                       ),
                       child: step.isCompleted
-                          ? const Icon(Icons.check, size: 12, color: Colors.black)
+                          ? const Icon(Icons.check,
+                              size: 12, color: Colors.black)
                           : Center(
                               child: Text('${index + 1}',
                                   style: AppText.body(10,
@@ -338,13 +354,15 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                                     ? AppColors.textTertiary
                                     : AppColors.textPrimary)),
                         Text(step.estimatedTime,
-                            style: AppText.body(10, color: AppColors.textTertiary)),
+                            style: AppText.body(10,
+                                color: AppColors.textTertiary)),
                       ],
                     ),
                   ),
                   if (isCurrent)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 6, vertical: 2),
                       decoration: BoxDecoration(
                         color: goal.type.color.withOpacity(0.15),
                         borderRadius: BorderRadius.circular(4),
@@ -356,7 +374,8 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                   const SizedBox(width: 6),
                   Icon(
                     isExpanded ? Icons.expand_less : Icons.expand_more,
-                    size: 14, color: AppColors.textTertiary,
+                    size: 14,
+                    color: AppColors.textTertiary,
                   ),
                 ],
               ),
@@ -369,7 +388,8 @@ class _GoalDetailViewState extends State<GoalDetailView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(step.detail,
-                        style: AppText.body(12, color: AppColors.textSecondary)),
+                        style:
+                            AppText.body(12, color: AppColors.textSecondary)),
                     if (step.tips.isNotEmpty) ...[
                       const SizedBox(height: 10),
                       Text('TIPS', style: AppText.label(9)),
@@ -409,12 +429,18 @@ class _GoalDetailViewState extends State<GoalDetailView> {
         child: Column(
           children: [
             _metaRow('Type', goal.type.label, goal.type.color),
-            const Divider(height: 1, indent: 12, endIndent: 12, color: AppColors.divider),
+            const Divider(
+                height: 1, indent: 12, endIndent: 12, color: AppColors.divider),
             _metaRow('Priority', goal.priority.label, goal.priority.color),
-            const Divider(height: 1, indent: 12, endIndent: 12, color: AppColors.divider),
+            const Divider(
+                height: 1, indent: 12, endIndent: 12, color: AppColors.divider),
             _metaRow('Created', _fmt(goal.createdDate), AppColors.textPrimary),
             if (goal.dueDate != null) ...[
-              const Divider(height: 1, indent: 12, endIndent: 12, color: AppColors.divider),
+              const Divider(
+                  height: 1,
+                  indent: 12,
+                  endIndent: 12,
+                  color: AppColors.divider),
               _metaRow('Due', _fmt(goal.dueDate!),
                   goal.isOverdue ? AppColors.danger : AppColors.warning),
             ],
@@ -426,10 +452,12 @@ class _GoalDetailViewState extends State<GoalDetailView> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
         child: Row(
           children: [
-            Text(label, style: AppText.body(12, color: AppColors.textSecondary)),
+            Text(label,
+                style: AppText.body(12, color: AppColors.textSecondary)),
             const Spacer(),
             Text(value,
-                style: AppText.body(12, weight: FontWeight.w600, color: valueColor)),
+                style: AppText.body(12,
+                    weight: FontWeight.w600, color: valueColor)),
           ],
         ),
       );
@@ -438,7 +466,10 @@ class _GoalDetailViewState extends State<GoalDetailView> {
 
   // ── Re-analyze ─────────────────────────────────────────────────────────────
   Future<void> _reanalyze(Goal goal, GoalStore store) async {
-    setState(() { _isReanalyzing = true; _error = null; });
+    setState(() {
+      _isReanalyzing = true;
+      _error = null;
+    });
     try {
       final result = await AnthropicService.analyzeGoal(
         title: goal.title,
@@ -451,10 +482,14 @@ class _GoalDetailViewState extends State<GoalDetailView> {
         aiSummary: result.summary,
         isAnalyzed: true,
         currentStepIndex: 0,
-        steps: result.steps.map((s) => GoalStep(
-          title: s.title, detail: s.detail,
-          estimatedTime: s.estimatedTime, tips: s.tips,
-        )).toList(),
+        steps: result.steps
+            .map((s) => GoalStep(
+                  title: s.title,
+                  detail: s.detail,
+                  estimatedTime: s.estimatedTime,
+                  tips: s.tips,
+                ))
+            .toList(),
       );
       store.updateGoal(updated);
     } catch (e) {

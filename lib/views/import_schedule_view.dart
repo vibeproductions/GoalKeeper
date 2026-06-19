@@ -17,8 +17,8 @@ class ImportScheduleView extends StatefulWidget {
 
 class _ImportScheduleViewState extends State<ImportScheduleView> {
   final _textCtrl = TextEditingController();
-  File?   _image;
-  bool    _parsing = false;
+  File? _image;
+  bool _parsing = false;
   String? _error;
   List<_EditableItem> _parsed = [];
 
@@ -28,7 +28,8 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.sidebarBg,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: SizedBox(
         width: 580,
         height: 620,
@@ -36,7 +37,8 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
           children: [
             _header,
             const Divider(height: 1, color: AppColors.divider),
-            Expanded(child: ListView(
+            Expanded(
+                child: ListView(
               padding: const EdgeInsets.all(18),
               children: [
                 if (_parsed.isEmpty) ...[
@@ -48,7 +50,8 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
                 ],
                 if (_error != null) ...[
                   const SizedBox(height: 8),
-                  Text(_error!, style: AppText.body(12, color: AppColors.danger)),
+                  Text(_error!,
+                      style: AppText.body(12, color: AppColors.danger)),
                 ],
               ],
             )),
@@ -63,13 +66,16 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
         child: Row(
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Import Schedule', style: AppText.display(18, weight: FontWeight.w700)),
-              Text('Paste text or attach a photo — Claude will extract all assignments.',
+              Text('Import Schedule',
+                  style: AppText.display(18, weight: FontWeight.w700)),
+              Text(
+                  'Paste text or attach a photo — Claude will extract all assignments.',
                   style: AppText.body(12, color: AppColors.textSecondary)),
             ]),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.close_rounded, color: AppColors.textTertiary),
+              icon: const Icon(Icons.close_rounded,
+                  color: AppColors.textTertiary),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -92,7 +98,8 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
               style: AppText.body(12),
               maxLines: 7,
               decoration: const InputDecoration(
-                hintText: 'e.g.\nMath – Chapter 5 – due Mon 3/3\nHistory – Essay – due Tue 3/4',
+                hintText:
+                    'e.g.\nMath – Chapter 5 – due Mon 3/3\nHistory – Essay – due Tue 3/4',
                 border: InputBorder.none,
                 contentPadding: EdgeInsets.all(12),
               ),
@@ -104,7 +111,8 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
             const Expanded(child: Divider(color: AppColors.divider)),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text('or', style: AppText.body(11, color: AppColors.textTertiary)),
+              child: Text('or',
+                  style: AppText.body(11, color: AppColors.textTertiary)),
             ),
             const Expanded(child: Divider(color: AppColors.divider)),
           ]),
@@ -118,7 +126,9 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
                 foregroundColor: AppColors.personalGoal,
                 elevation: 0,
               ),
-              icon: Icon(_image == null ? Icons.add_photo_alternate : Icons.photo, size: 14),
+              icon: Icon(
+                  _image == null ? Icons.add_photo_alternate : Icons.photo,
+                  size: 14),
               label: Text(_image == null ? 'Choose Image…' : 'Change Image…'),
               onPressed: _pickImage,
             ),
@@ -126,10 +136,12 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
               const SizedBox(width: 12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
-                child: Image.file(_image!, width: 50, height: 50, fit: BoxFit.cover),
+                child: Image.file(_image!,
+                    width: 50, height: 50, fit: BoxFit.cover),
               ),
               IconButton(
-                icon: const Icon(Icons.close, size: 14, color: AppColors.textTertiary),
+                icon: const Icon(Icons.close,
+                    size: 14, color: AppColors.textTertiary),
                 onPressed: () => setState(() => _image = null),
               ),
             ],
@@ -138,6 +150,7 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
       );
 
   Widget get _parseBtn => GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: _canParse && !_parsing ? _parse : null,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 13),
@@ -153,16 +166,22 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (_parsing) ...[
-                const SizedBox(width: 14, height: 14,
-                    child: CircularProgressIndicator(strokeWidth: 1.5, color: Colors.black)),
+                const SizedBox(
+                    width: 14,
+                    height: 14,
+                    child: CircularProgressIndicator(
+                        strokeWidth: 1.5, color: Colors.black)),
                 const SizedBox(width: 8),
                 Text('Claude is reading your schedule…',
-                    style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                    style: AppText.body(14,
+                        weight: FontWeight.w600, color: Colors.black)),
               ] else ...[
-                const Icon(Icons.auto_awesome_rounded, size: 14, color: Colors.black),
+                const Icon(Icons.auto_awesome_rounded,
+                    size: 14, color: Colors.black),
                 const SizedBox(width: 8),
                 Text('Extract Assignments with Claude',
-                    style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                    style: AppText.body(14,
+                        weight: FontWeight.w600, color: Colors.black)),
               ],
             ],
           ),
@@ -175,39 +194,48 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(children: [
-          const Icon(Icons.auto_awesome_rounded, size: 13, color: AppColors.accent),
+          const Icon(Icons.auto_awesome_rounded,
+              size: 13, color: AppColors.accent),
           const SizedBox(width: 6),
           Text('Review Extracted Assignments',
-              style: AppText.body(14, weight: FontWeight.w700, color: AppColors.accent)),
+              style: AppText.body(14,
+                  weight: FontWeight.w700, color: AppColors.accent)),
           const Spacer(),
           Text('${_parsed.length} found',
               style: AppText.body(12, color: AppColors.textSecondary)),
         ]),
         const SizedBox(height: 8),
-        Text('Review and edit before saving. Uncheck any you don\'t want to add.',
+        Text(
+            'Review and edit before saving. Uncheck any you don\'t want to add.',
             style: AppText.body(12, color: AppColors.textSecondary)),
         const SizedBox(height: 12),
         ..._parsed.map((item) => _reviewRow(item)),
         const SizedBox(height: 14),
         Row(children: [
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => setState(() => _parsed = []),
-            child: Text('Start Over', style: AppText.body(13, color: AppColors.textSecondary)),
+            child: Text('Start Over',
+                style: AppText.body(13, color: AppColors.textSecondary)),
           ),
           const Spacer(),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: toAdd > 0 ? _save : null,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
               decoration: BoxDecoration(
-                color: toAdd > 0 ? AppColors.accent : Colors.grey.withOpacity(0.3),
+                color:
+                    toAdd > 0 ? AppColors.accent : Colors.grey.withOpacity(0.3),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Row(children: [
-                const Icon(Icons.check_circle_rounded, size: 13, color: Colors.black),
+                const Icon(Icons.check_circle_rounded,
+                    size: 13, color: Colors.black),
                 const SizedBox(width: 6),
                 Text('Add $toAdd Assignment${toAdd == 1 ? "" : "s"}',
-                    style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                    style: AppText.body(13,
+                        weight: FontWeight.w600, color: Colors.black)),
               ]),
             ),
           ),
@@ -230,11 +258,14 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
           ),
           Icon(item.type.icon, size: 13, color: item.type.color),
           const SizedBox(width: 8),
-          Expanded(child: Column(
+          Expanded(
+              child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(item.title, style: AppText.body(12, weight: FontWeight.w500)),
-              Text('${item.subject} · ${item.type.label} · '
+              Text(item.title,
+                  style: AppText.body(12, weight: FontWeight.w500)),
+              Text(
+                  '${item.subject} · ${item.type.label} · '
                   '${item.dueDate.month}/${item.dueDate.day}/${item.dueDate.year}',
                   style: AppText.body(10, color: AppColors.textSecondary)),
             ],
@@ -250,14 +281,22 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
   }
 
   Future<void> _parse() async {
-    setState(() { _parsing = true; _error = null; });
+    setState(() {
+      _parsing = true;
+      _error = null;
+    });
     try {
       final results = await AnthropicService.parseSchedule(
-        text: _textCtrl.text, image: _image);
-      setState(() => _parsed = results.map((r) => _EditableItem(
-        title: r.title, subject: r.subject,
-        type: r.type, dueDate: r.dueDate, notes: r.notes,
-      )).toList());
+          text: _textCtrl.text, image: _image);
+      setState(() => _parsed = results
+          .map((r) => _EditableItem(
+                title: r.title,
+                subject: r.subject,
+                type: r.type,
+                dueDate: r.dueDate,
+                notes: r.notes,
+              ))
+          .toList());
     } catch (e) {
       setState(() => _error = e.toString());
     }
@@ -266,9 +305,15 @@ class _ImportScheduleViewState extends State<ImportScheduleView> {
 
   void _save() {
     final store = context.read<GoalStore>();
-    final items = _parsed.where((i) => i.include).map((i) =>
-        ScheduleItem(title: i.title, subject: i.subject,
-            type: i.type, dueDate: i.dueDate, notes: i.notes)).toList();
+    final items = _parsed
+        .where((i) => i.include)
+        .map((i) => ScheduleItem(
+            title: i.title,
+            subject: i.subject,
+            type: i.type,
+            dueDate: i.dueDate,
+            notes: i.notes))
+        .toList();
     store.addScheduleItems(items);
     Navigator.pop(context);
   }
@@ -279,6 +324,10 @@ class _EditableItem {
   ScheduleItemType type;
   DateTime dueDate;
   bool include = true;
-  _EditableItem({required this.title, required this.subject,
-      required this.type, required this.dueDate, required this.notes});
+  _EditableItem(
+      {required this.title,
+      required this.subject,
+      required this.type,
+      required this.dueDate,
+      required this.notes});
 }

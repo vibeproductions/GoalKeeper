@@ -32,10 +32,10 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
   @override
   Widget build(BuildContext context) {
     final store = context.watch<GoalStore>();
-    final item  = store.scheduleItems.firstWhere(
-      (i) => i.id == widget.item.id, orElse: () => widget.item);
+    final item = store.scheduleItems
+        .firstWhere((i) => i.id == widget.item.id, orElse: () => widget.item);
     final upcoming = store.upcomingItemsForSubject(item.subject, item.id);
-    final guide    = store.studyGuideFor(item.id);
+    final guide = store.studyGuideFor(item.id);
 
     return Container(
       color: AppColors.background,
@@ -66,14 +66,18 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
           children: [
             Row(
               children: [
-                Container(width: 10, height: 10,
-                    decoration: BoxDecoration(color: item.type.color, shape: BoxShape.circle)),
+                Container(
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                        color: item.type.color, shape: BoxShape.circle)),
                 const SizedBox(width: 8),
                 Text(item.subject.toUpperCase(),
                     style: AppText.label(10, color: item.type.color)),
                 const Spacer(),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: item.type.color.withOpacity(0.12),
                     borderRadius: BorderRadius.circular(6),
@@ -82,21 +86,29 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     Icon(item.type.icon, size: 11, color: item.type.color),
                     const SizedBox(width: 4),
                     Text(item.type.label,
-                        style: AppText.body(11, weight: FontWeight.w600, color: item.type.color)),
+                        style: AppText.body(11,
+                            weight: FontWeight.w600, color: item.type.color)),
                   ]),
                 ),
               ],
             ),
             const SizedBox(height: 12),
-            Text(item.title, style: AppText.display(22, weight: FontWeight.w700)),
+            Text(item.title,
+                style: AppText.display(22, weight: FontWeight.w700)),
             const SizedBox(height: 8),
             Row(children: [
-              Icon(Icons.calendar_today_rounded, size: 13,
-                  color: item.isOverdue ? AppColors.danger : AppColors.textSecondary),
+              Icon(Icons.calendar_today_rounded,
+                  size: 13,
+                  color: item.isOverdue
+                      ? AppColors.danger
+                      : AppColors.textSecondary),
               const SizedBox(width: 6),
               Text(_dueDateString(item),
-                  style: AppText.body(13, weight: FontWeight.w500,
-                      color: item.isOverdue ? AppColors.danger : AppColors.textSecondary)),
+                  style: AppText.body(13,
+                      weight: FontWeight.w500,
+                      color: item.isOverdue
+                          ? AppColors.danger
+                          : AppColors.textSecondary)),
             ]),
             if (item.notes.isNotEmpty) ...[
               const SizedBox(height: 10),
@@ -106,28 +118,40 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   color: Colors.white.withOpacity(0.04),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(item.notes, style: AppText.body(13, color: AppColors.textSecondary)),
+                child: Text(item.notes,
+                    style: AppText.body(13, color: AppColors.textSecondary)),
               ),
             ],
             const SizedBox(height: 14),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => store.toggleScheduleItem(item.id),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: BoxDecoration(
-                  color: item.isCompleted ? Colors.white.withOpacity(0.06) : item.type.color,
+                  color: item.isCompleted
+                      ? Colors.white.withOpacity(0.06)
+                      : item.type.color,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Icon(item.isCompleted ? Icons.undo_rounded : Icons.check_circle_rounded,
+                    Icon(
+                        item.isCompleted
+                            ? Icons.undo_rounded
+                            : Icons.check_circle_rounded,
                         size: 14,
-                        color: item.isCompleted ? AppColors.textSecondary : Colors.black),
+                        color: item.isCompleted
+                            ? AppColors.textSecondary
+                            : Colors.black),
                     const SizedBox(width: 6),
                     Text(item.isCompleted ? 'Mark Incomplete' : 'Mark Complete',
-                        style: AppText.body(13, weight: FontWeight.w600,
-                            color: item.isCompleted ? AppColors.textSecondary : Colors.black)),
+                        style: AppText.body(13,
+                            weight: FontWeight.w600,
+                            color: item.isCompleted
+                                ? AppColors.textSecondary
+                                : Colors.black)),
                   ],
                 ),
               ),
@@ -136,12 +160,14 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
         ),
       );
 
-  Widget _studyGuideSection(ScheduleItem item, StudyGuide? guide, GoalStore store) =>
+  Widget _studyGuideSection(
+          ScheduleItem item, StudyGuide? guide, GoalStore store) =>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
-            Text('Study Guide', style: AppText.display(15, weight: FontWeight.w700)),
+            Text('Study Guide',
+                style: AppText.display(15, weight: FontWeight.w700)),
             const Spacer(),
             if (guide != null)
               Container(
@@ -151,7 +177,8 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   borderRadius: BorderRadius.circular(6),
                 ),
                 child: Text('Generated',
-                    style: AppText.body(11, weight: FontWeight.w600, color: AppColors.success)),
+                    style: AppText.body(11,
+                        weight: FontWeight.w600, color: AppColors.success)),
               ),
           ]),
           const SizedBox(height: 10),
@@ -168,11 +195,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                 children: [
                   Text(guide.overview,
                       style: AppText.body(12, color: AppColors.textSecondary),
-                      maxLines: 3, overflow: TextOverflow.ellipsis),
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis),
                   const SizedBox(height: 10),
                   Row(children: [
                     Expanded(
                       child: GestureDetector(
+                        behavior: HitTestBehavior.opaque,
                         onTap: () => showDialog(
                           context: context,
                           builder: (_) => StudyGuideDialog(
@@ -187,10 +216,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const Icon(Icons.menu_book_rounded, size: 13, color: Colors.black),
+                              const Icon(Icons.menu_book_rounded,
+                                  size: 13, color: Colors.black),
                               const SizedBox(width: 6),
                               Text('Open Study Guide',
-                                  style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                                  style: AppText.body(13,
+                                      weight: FontWeight.w600,
+                                      color: Colors.black)),
                             ],
                           ),
                         ),
@@ -198,9 +230,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                     ),
                     const SizedBox(width: 10),
                     GestureDetector(
-                      onTap: _generatingGuide ? null : () => _generateGuide(item, store),
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _generatingGuide
+                          ? null
+                          : () => _generateGuide(item, store),
                       child: Text('Regenerate',
-                          style: AppText.body(12, color: AppColors.textSecondary)),
+                          style:
+                              AppText.body(12, color: AppColors.textSecondary)),
                     ),
                   ]),
                 ],
@@ -208,28 +244,38 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             ),
           ] else ...[
             GestureDetector(
-              onTap: _generatingGuide ? null : () => _generateGuide(item, store),
+              behavior: HitTestBehavior.opaque,
+              onTap:
+                  _generatingGuide ? null : () => _generateGuide(item, store),
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [item.type.color, item.type.color.withOpacity(0.7)]),
+                  gradient: LinearGradient(colors: [
+                    item.type.color,
+                    item.type.color.withOpacity(0.7)
+                  ]),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (_generatingGuide) ...[
-                      const SizedBox(width: 14, height: 14,
-                          child: CircularProgressIndicator(strokeWidth: 1.5, color: Colors.black)),
+                      const SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 1.5, color: Colors.black)),
                       const SizedBox(width: 8),
                       Text('Claude is researching…',
-                          style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                          style: AppText.body(13,
+                              weight: FontWeight.w600, color: Colors.black)),
                     ] else ...[
-                      const Icon(Icons.auto_awesome_rounded, size: 13, color: Colors.black),
+                      const Icon(Icons.auto_awesome_rounded,
+                          size: 13, color: Colors.black),
                       const SizedBox(width: 8),
                       Text('Generate Study Guide with Claude',
-                          style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                          style: AppText.body(13,
+                              weight: FontWeight.w600, color: Colors.black)),
                     ],
                   ],
                 ),
@@ -237,11 +283,13 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             ),
           ],
           if (_guideError != null)
-            Text(_guideError!, style: AppText.body(12, color: AppColors.danger)),
+            Text(_guideError!,
+                style: AppText.body(12, color: AppColors.danger)),
         ],
       );
 
-  Widget _upcomingSection(List<ScheduleItem> upcoming, GoalStore store) => Column(
+  Widget _upcomingSection(List<ScheduleItem> upcoming, GoalStore store) =>
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(children: [
@@ -259,9 +307,12 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
   Widget _upcomingRow(ScheduleItem u, GoalStore store) {
     final expanded = _expandedUpcoming.contains(u.id);
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => setState(() {
-        if (expanded) _expandedUpcoming.remove(u.id);
-        else _expandedUpcoming.add(u.id);
+        if (expanded)
+          _expandedUpcoming.remove(u.id);
+        else
+          _expandedUpcoming.add(u.id);
       }),
       child: Container(
         margin: const EdgeInsets.only(bottom: 6),
@@ -275,19 +326,27 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
             Padding(
               padding: const EdgeInsets.all(12),
               child: Row(children: [
-                Container(width: 8, height: 8,
-                    decoration: BoxDecoration(color: u.type.color, shape: BoxShape.circle)),
+                Container(
+                    width: 8,
+                    height: 8,
+                    decoration: BoxDecoration(
+                        color: u.type.color, shape: BoxShape.circle)),
                 const SizedBox(width: 10),
-                Expanded(child: Column(
+                Expanded(
+                    child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(u.title, style: AppText.body(13, weight: FontWeight.w500)),
+                    Text(u.title,
+                        style: AppText.body(13, weight: FontWeight.w500)),
                     Text('Due in ${u.daysUntilDue}d',
-                        style: AppText.body(11, color: AppColors.textSecondary)),
+                        style:
+                            AppText.body(11, color: AppColors.textSecondary)),
                   ],
                 )),
                 Row(children: [
-                  Text(u.type.label, style: AppText.body(10, color: u.type.color.withOpacity(0.7))),
+                  Text(u.type.label,
+                      style: AppText.body(10,
+                          color: u.type.color.withOpacity(0.7))),
                   const SizedBox(width: 6),
                   Icon(expanded ? Icons.expand_less : Icons.expand_more,
                       size: 14, color: AppColors.textTertiary),
@@ -302,9 +361,12 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (u.notes.isNotEmpty)
-                      Text(u.notes, style: AppText.body(12, color: AppColors.textSecondary)),
+                      Text(u.notes,
+                          style:
+                              AppText.body(12, color: AppColors.textSecondary)),
                     const SizedBox(height: 6),
                     GestureDetector(
+                      behavior: HitTestBehavior.opaque,
                       onTap: () => store.toggleScheduleItem(u.id),
                       child: Text('Mark Complete',
                           style: AppText.body(11,
@@ -322,29 +384,35 @@ class _ScheduleDetailViewState extends State<ScheduleDetailView> {
 
   String _dueDateString(ScheduleItem item) {
     final days = item.daysUntilDue;
-    final date = '${item.dueDate.month}/${item.dueDate.day}/${item.dueDate.year}';
+    final date =
+        '${item.dueDate.month}/${item.dueDate.day}/${item.dueDate.year}';
     if (item.isCompleted) return 'Completed · $date';
-    if (days < 0)  return 'Overdue by ${-days} day${-days == 1 ? "" : "s"} · $date';
+    if (days < 0)
+      return 'Overdue by ${-days} day${-days == 1 ? "" : "s"} · $date';
     if (days == 0) return 'Due today · $date';
     if (days == 1) return 'Due tomorrow · $date';
     return 'Due in $days days · $date';
   }
 
   Future<void> _generateGuide(ScheduleItem item, GoalStore store) async {
-    setState(() { _generatingGuide = true; _guideError = null; });
+    setState(() {
+      _generatingGuide = true;
+      _guideError = null;
+    });
     try {
       final guide = await AnthropicService.generateStudyGuide(
-        topic:    item.title,
-        subject:  item.subject,
+        topic: item.title,
+        subject: item.subject,
         itemType: item.type,
-        dueDate:  item.dueDate,
-        notes:    item.notes,
+        dueDate: item.dueDate,
+        notes: item.notes,
       );
       store.saveStudyGuide(guide, item.id);
       if (mounted) {
         showDialog(
           context: context,
-          builder: (_) => StudyGuideDialog(guide: guide, accentColor: item.type.color),
+          builder: (_) =>
+              StudyGuideDialog(guide: guide, accentColor: item.type.color),
         );
       }
     } catch (e) {

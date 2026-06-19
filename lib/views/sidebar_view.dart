@@ -70,7 +70,8 @@ class _SidebarViewState extends State<SidebarView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('GoalKeeper', style: AppText.display(20, weight: FontWeight.w700)),
+                Text('GoalKeeper',
+                    style: AppText.display(20, weight: FontWeight.w700)),
                 const SizedBox(height: 2),
                 Text(
                   '${store.activeGoals.length} goals · '
@@ -91,15 +92,20 @@ class _SidebarViewState extends State<SidebarView> {
             ),
             onSelected: (value) {
               switch (value) {
-                case 'goal':     widget.onAddGoal();
-                case 'schedule': widget.onImportSchedule();
-                case 'calendar': widget.onImportCalendar();
+                case 'goal':
+                  widget.onAddGoal();
+                case 'schedule':
+                  widget.onImportSchedule();
+                case 'calendar':
+                  widget.onImportCalendar();
               }
             },
             itemBuilder: (_) => [
-              _menuItem('goal',     Icons.star_rounded,              'New Goal'),
-              _menuItem('schedule', Icons.calendar_month_rounded,     'Import Schedule'),
-              _menuItem('calendar', Icons.calendar_today_rounded,     'Import Calendar (.ics)'),
+              _menuItem('goal', Icons.star_rounded, 'New Goal'),
+              _menuItem(
+                  'schedule', Icons.calendar_month_rounded, 'Import Schedule'),
+              _menuItem('calendar', Icons.calendar_today_rounded,
+                  'Import Calendar (.ics)'),
             ],
           ),
         ],
@@ -123,10 +129,12 @@ class _SidebarViewState extends State<SidebarView> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
         child: Row(
           children: [
-            const Icon(Icons.warning_amber_rounded, size: 13, color: AppColors.danger),
+            const Icon(Icons.warning_amber_rounded,
+                size: 13, color: AppColors.danger),
             const SizedBox(width: 6),
             Text('${store.overdueGoals.length} overdue',
-                style: AppText.body(11, weight: FontWeight.w600, color: AppColors.danger)),
+                style: AppText.body(11,
+                    weight: FontWeight.w600, color: AppColors.danger)),
           ],
         ),
       );
@@ -171,10 +179,10 @@ class _SidebarViewState extends State<SidebarView> {
 
   // ── Subject group ──────────────────────────────────────────────────────────
   Widget _subjectGroup(GoalStore store, String subject) {
-    final items     = store.itemsForSubject(subject);
+    final items = store.itemsForSubject(subject);
     final isExpanded = _expandedSubjects.contains(subject);
-    final overdue   = items.where((i) => i.isOverdue).length;
-    final upcoming  = items.where((i) => !i.isCompleted).length;
+    final overdue = items.where((i) => i.isOverdue).length;
+    final upcoming = items.where((i) => !i.isCompleted).length;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 2),
@@ -187,8 +195,10 @@ class _SidebarViewState extends State<SidebarView> {
           // Subject header
           InkWell(
             onTap: () => setState(() {
-              if (isExpanded) _expandedSubjects.remove(subject);
-              else _expandedSubjects.add(subject);
+              if (isExpanded)
+                _expandedSubjects.remove(subject);
+              else
+                _expandedSubjects.add(subject);
             }),
             borderRadius: BorderRadius.circular(AppRadius.sm),
             child: Padding(
@@ -208,14 +218,16 @@ class _SidebarViewState extends State<SidebarView> {
                   ),
                   if (overdue > 0)
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 5, vertical: 2),
                       decoration: BoxDecoration(
                         color: AppColors.danger.withOpacity(0.12),
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text('$overdue overdue',
                           style: AppText.body(9,
-                              weight: FontWeight.w700, color: AppColors.danger)),
+                              weight: FontWeight.w700,
+                              color: AppColors.danger)),
                     )
                   else
                     Text('$upcoming',
@@ -224,8 +236,7 @@ class _SidebarViewState extends State<SidebarView> {
               ),
             ),
           ),
-          if (isExpanded)
-            ...items.map((item) => _ScheduleRow(item: item)),
+          if (isExpanded) ...items.map((item) => _ScheduleRow(item: item)),
         ],
       ),
     );
@@ -252,25 +263,30 @@ class _GoalRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store      = context.watch<GoalStore>();
+    final store = context.watch<GoalStore>();
     final isSelected = store.selectedGoalID == goal.id &&
         store.detailSelection == DetailSelection.goal;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => store.selectGoal(goal.id),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 1),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
+          color:
+              isSelected ? Colors.white.withOpacity(0.1) : Colors.transparent,
           borderRadius: BorderRadius.circular(AppRadius.sm),
           border: Border.all(
-            color: isSelected ? goal.type.color.withOpacity(0.3) : Colors.transparent,
+            color: isSelected
+                ? goal.type.color.withOpacity(0.3)
+                : Colors.transparent,
           ),
         ),
         child: Row(
           children: [
-            MiniRingView(progress: goal.progress, color: goal.type.color, size: 30),
+            MiniRingView(
+                progress: goal.progress, color: goal.type.color, size: 30),
             const SizedBox(width: 10),
             Expanded(
               child: Column(
@@ -282,8 +298,8 @@ class _GoalRow extends StatelessWidget {
                   const SizedBox(height: 2),
                   Row(
                     children: [
-                      Icon(goal.type.icon, size: 9,
-                          color: goal.type.color.withOpacity(0.7)),
+                      Icon(goal.type.icon,
+                          size: 9, color: goal.type.color.withOpacity(0.7)),
                       const SizedBox(width: 4),
                       Text(
                         goal.daysUntilDue != null
@@ -325,29 +341,33 @@ class _ScheduleRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final store      = context.watch<GoalStore>();
+    final store = context.watch<GoalStore>();
     final isSelected = store.selectedScheduleItemID == item.id &&
         store.detailSelection == DetailSelection.scheduleItem;
 
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => store.selectScheduleItem(item.id),
       child: Container(
         padding: const EdgeInsets.fromLTRB(10, 5, 10, 5),
         decoration: BoxDecoration(
-          color: isSelected ? Colors.white.withOpacity(0.08) : Colors.transparent,
+          color:
+              isSelected ? Colors.white.withOpacity(0.08) : Colors.transparent,
           borderRadius: BorderRadius.circular(6),
         ),
         child: Row(
           children: [
             // Checkbox
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => store.toggleScheduleItem(item.id),
               child: Container(
                 width: 16,
                 height: 16,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: item.isCompleted ? item.type.color : Colors.transparent,
+                  color:
+                      item.isCompleted ? item.type.color : Colors.transparent,
                   border: Border.all(
                     color: item.isCompleted
                         ? item.type.color
@@ -367,7 +387,8 @@ class _ScheduleRow extends StatelessWidget {
                 children: [
                   Text(
                     item.title,
-                    style: AppText.body(12, weight: FontWeight.w500,
+                    style: AppText.body(12,
+                        weight: FontWeight.w500,
                         color: item.isCompleted
                             ? AppColors.textTertiary
                             : AppColors.textPrimary),
@@ -377,8 +398,8 @@ class _ScheduleRow extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      Icon(item.type.icon, size: 8,
-                          color: item.type.color.withOpacity(0.7)),
+                      Icon(item.type.icon,
+                          size: 8, color: item.type.color.withOpacity(0.7)),
                       const SizedBox(width: 4),
                       Text(_dueDateLabel,
                           style: AppText.body(10,
@@ -399,7 +420,7 @@ class _ScheduleRow extends StatelessWidget {
   String get _dueDateLabel {
     if (item.isCompleted) return 'Done';
     final d = item.daysUntilDue;
-    if (d < 0)  return 'Overdue ${-d}d';
+    if (d < 0) return 'Overdue ${-d}d';
     if (d == 0) return 'Due today';
     if (d == 1) return 'Due tomorrow';
     return 'Due in ${d}d';

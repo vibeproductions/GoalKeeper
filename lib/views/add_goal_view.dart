@@ -18,17 +18,17 @@ class AddGoalView extends StatefulWidget {
 
 class _AddGoalViewState extends State<AddGoalView> {
   final _titleCtrl = TextEditingController();
-  final _descCtrl  = TextEditingController();
+  final _descCtrl = TextEditingController();
   final _rubricCtrl = TextEditingController();
 
-  GoalType     _type     = GoalType.assignment;
+  GoalType _type = GoalType.assignment;
   GoalPriority _priority = GoalPriority.medium;
-  bool         _hasDue   = false;
-  DateTime     _dueDate  = DateTime.now().add(const Duration(days: 7));
-  bool         _showRubric = false;
-  File?        _image;
-  bool         _analyzing = false;
-  String?      _error;
+  bool _hasDue = false;
+  DateTime _dueDate = DateTime.now().add(const Duration(days: 7));
+  bool _showRubric = false;
+  File? _image;
+  bool _analyzing = false;
+  String? _error;
   GoalAnalysis? _result;
 
   bool get _valid => _titleCtrl.text.trim().isNotEmpty;
@@ -37,7 +37,8 @@ class _AddGoalViewState extends State<AddGoalView> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.sidebarBg,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: SizedBox(
         width: 560,
         height: 680,
@@ -56,7 +57,8 @@ class _AddGoalViewState extends State<AddGoalView> {
                   _analyzeBtn,
                   if (_error != null) ...[
                     const SizedBox(height: 8),
-                    Text(_error!, style: AppText.body(12, color: AppColors.danger)),
+                    Text(_error!,
+                        style: AppText.body(12, color: AppColors.danger)),
                   ],
                   if (_result != null) ...[
                     const SizedBox(height: 14),
@@ -75,10 +77,12 @@ class _AddGoalViewState extends State<AddGoalView> {
         padding: const EdgeInsets.fromLTRB(22, 20, 22, 14),
         child: Row(
           children: [
-            Text('New Goal', style: AppText.display(18, weight: FontWeight.w700)),
+            Text('New Goal',
+                style: AppText.display(18, weight: FontWeight.w700)),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.close_rounded, color: AppColors.textTertiary),
+              icon: const Icon(Icons.close_rounded,
+                  color: AppColors.textTertiary),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -91,23 +95,29 @@ class _AddGoalViewState extends State<AddGoalView> {
           children: GoalType.values.map((t) {
             final selected = _type == t;
             return GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => setState(() => _type = t),
               child: Container(
                 margin: const EdgeInsets.only(right: 8),
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
                 decoration: BoxDecoration(
                   color: selected ? t.color : t.color.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(
                   children: [
-                    Icon(t.icon, size: 13,
-                        color: selected ? Colors.black : t.color.withOpacity(0.8)),
+                    Icon(t.icon,
+                        size: 13,
+                        color:
+                            selected ? Colors.black : t.color.withOpacity(0.8)),
                     const SizedBox(width: 5),
                     Text(t.label,
                         style: AppText.body(12,
                             weight: FontWeight.w500,
-                            color: selected ? Colors.black : t.color.withOpacity(0.8))),
+                            color: selected
+                                ? Colors.black
+                                : t.color.withOpacity(0.8))),
                   ],
                 ),
               ),
@@ -120,133 +130,165 @@ class _AddGoalViewState extends State<AddGoalView> {
         decoration: cardDecoration(),
         child: Column(
           children: [
-            _field('Title', child: TextField(
-              controller: _titleCtrl,
-              style: AppText.body(14),
-              decoration: const InputDecoration(
-                hintText: 'e.g. Research Paper on Climate Change',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-              ),
-              onChanged: (_) => setState(() {}),
-            )),
-            const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
-            _field('Description', child: TextField(
-              controller: _descCtrl,
-              style: AppText.body(13),
-              maxLines: 3,
-              decoration: const InputDecoration(
-                hintText: 'Describe the goal or what success looks like…',
-                border: InputBorder.none,
-                contentPadding: EdgeInsets.zero,
-              ),
-            )),
-            const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
-            _field('Priority', child: Row(
-              children: GoalPriority.values.map((p) {
-                final sel = _priority == p;
-                return GestureDetector(
-                  onTap: () => setState(() => _priority = p),
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 6),
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: sel ? p.color : p.color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(p.label,
-                        style: AppText.body(11,
-                            weight: FontWeight.w600,
-                            color: sel ? Colors.black : p.color)),
+            _field('Title',
+                child: TextField(
+                  controller: _titleCtrl,
+                  style: AppText.body(14),
+                  decoration: const InputDecoration(
+                    hintText: 'e.g. Research Paper on Climate Change',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
                   ),
-                );
-              }).toList(),
-            )),
-            const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
-            _field('Due Date', child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+                  onChanged: (_) => setState(() {}),
+                )),
+            const Divider(
+                height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+            _field('Description',
+                child: TextField(
+                  controller: _descCtrl,
+                  style: AppText.body(13),
+                  maxLines: 3,
+                  decoration: const InputDecoration(
+                    hintText: 'Describe the goal or what success looks like…',
+                    border: InputBorder.none,
+                    contentPadding: EdgeInsets.zero,
+                  ),
+                )),
+            const Divider(
+                height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+            _field('Priority',
+                child: Row(
+                  children: GoalPriority.values.map((p) {
+                    final sel = _priority == p;
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => setState(() => _priority = p),
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 6),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 5),
+                        decoration: BoxDecoration(
+                          color: sel ? p.color : p.color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(p.label,
+                            style: AppText.body(11,
+                                weight: FontWeight.w600,
+                                color: sel ? Colors.black : p.color)),
+                      ),
+                    );
+                  }).toList(),
+                )),
+            const Divider(
+                height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+            _field('Due Date',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Switch(value: _hasDue, onChanged: (v) => setState(() => _hasDue = v)),
-                    const SizedBox(width: 8),
-                    Text('Set a due date', style: AppText.body(13, color: AppColors.textSecondary)),
+                    Row(
+                      children: [
+                        Switch(
+                            value: _hasDue,
+                            onChanged: (v) => setState(() => _hasDue = v)),
+                        const SizedBox(width: 8),
+                        Text('Set a due date',
+                            style: AppText.body(13,
+                                color: AppColors.textSecondary)),
+                      ],
+                    ),
+                    if (_hasDue)
+                      TextButton(
+                        onPressed: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: _dueDate,
+                            firstDate: DateTime.now(),
+                            lastDate:
+                                DateTime.now().add(const Duration(days: 1000)),
+                          );
+                          if (picked != null) setState(() => _dueDate = picked);
+                        },
+                        child: Text(
+                          '${_dueDate.month}/${_dueDate.day}/${_dueDate.year}',
+                          style: AppText.body(13, color: AppColors.accent),
+                        ),
+                      ),
                   ],
-                ),
-                if (_hasDue)
-                  TextButton(
-                    onPressed: () async {
-                      final picked = await showDatePicker(
-                        context: context,
-                        initialDate: _dueDate,
-                        firstDate: DateTime.now(),
-                        lastDate: DateTime.now().add(const Duration(days: 1000)),
-                      );
-                      if (picked != null) setState(() => _dueDate = picked);
-                    },
-                    child: Text(
-                      '${_dueDate.month}/${_dueDate.day}/${_dueDate.year}',
-                      style: AppText.body(13, color: AppColors.accent),
+                )),
+            const Divider(
+                height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+            _field('Rubric / Requirements',
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () => setState(() => _showRubric = !_showRubric),
+                      child: Row(
+                        children: [
+                          Text(
+                              _showRubric
+                                  ? 'Hide rubric'
+                                  : 'Add rubric or grading criteria',
+                              style: AppText.body(13, color: AppColors.accent)),
+                          const Spacer(),
+                          Icon(
+                              _showRubric
+                                  ? Icons.expand_less
+                                  : Icons.expand_more,
+                              size: 16,
+                              color: AppColors.accent),
+                        ],
+                      ),
                     ),
-                  ),
-              ],
-            )),
-            const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
-            _field('Rubric / Requirements', child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onTap: () => setState(() => _showRubric = !_showRubric),
-                  child: Row(
-                    children: [
-                      Text(_showRubric ? 'Hide rubric' : 'Add rubric or grading criteria',
-                          style: AppText.body(13, color: AppColors.accent)),
-                      const Spacer(),
-                      Icon(_showRubric ? Icons.expand_less : Icons.expand_more,
-                          size: 16, color: AppColors.accent),
+                    if (_showRubric)
+                      TextField(
+                        controller: _rubricCtrl,
+                        style: AppText.body(12),
+                        maxLines: 4,
+                        decoration: const InputDecoration(
+                          hintText: 'Paste rubric, criteria, or requirements…',
+                          border: InputBorder.none,
+                          contentPadding: EdgeInsets.only(top: 8),
+                        ),
+                      ),
+                  ],
+                )),
+            const Divider(
+                height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
+            _field('Attach Image',
+                child: Row(
+                  children: [
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.accent.withOpacity(0.1),
+                        foregroundColor: AppColors.accent,
+                        elevation: 0,
+                      ),
+                      icon: Icon(
+                          _image == null
+                              ? Icons.add_photo_alternate
+                              : Icons.photo,
+                          size: 14),
+                      label: Text(
+                          _image == null ? 'Choose Image…' : 'Change Image…'),
+                      onPressed: _pickImage,
+                    ),
+                    if (_image != null) ...[
+                      const SizedBox(width: 12),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.file(_image!,
+                            width: 44, height: 44, fit: BoxFit.cover),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close,
+                            size: 14, color: AppColors.textTertiary),
+                        onPressed: () => setState(() => _image = null),
+                      ),
                     ],
-                  ),
-                ),
-                if (_showRubric)
-                  TextField(
-                    controller: _rubricCtrl,
-                    style: AppText.body(12),
-                    maxLines: 4,
-                    decoration: const InputDecoration(
-                      hintText: 'Paste rubric, criteria, or requirements…',
-                      border: InputBorder.none,
-                      contentPadding: EdgeInsets.only(top: 8),
-                    ),
-                  ),
-              ],
-            )),
-            const Divider(height: 1, indent: 14, endIndent: 14, color: AppColors.divider),
-            _field('Attach Image', child: Row(
-              children: [
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.accent.withOpacity(0.1),
-                    foregroundColor: AppColors.accent,
-                    elevation: 0,
-                  ),
-                  icon: Icon(_image == null ? Icons.add_photo_alternate : Icons.photo,
-                      size: 14),
-                  label: Text(_image == null ? 'Choose Image…' : 'Change Image…'),
-                  onPressed: _pickImage,
-                ),
-                if (_image != null) ...[
-                  const SizedBox(width: 12),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.file(_image!, width: 44, height: 44, fit: BoxFit.cover),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, size: 14, color: AppColors.textTertiary),
-                    onPressed: () => setState(() => _image = null),
-                  ),
-                ],
-              ],
-            )),
+                  ],
+                )),
           ],
         ),
       );
@@ -265,6 +307,7 @@ class _AddGoalViewState extends State<AddGoalView> {
 
   Widget get _analyzeBtn {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: _valid && !_analyzing ? _analyze : null,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 13),
@@ -281,17 +324,21 @@ class _AddGoalViewState extends State<AddGoalView> {
           children: [
             if (_analyzing) ...[
               const SizedBox(
-                  width: 14, height: 14,
+                  width: 14,
+                  height: 14,
                   child: CircularProgressIndicator(
                       strokeWidth: 1.5, color: Colors.black)),
               const SizedBox(width: 8),
               Text('Claude is analyzing…',
-                  style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                  style: AppText.body(14,
+                      weight: FontWeight.w600, color: Colors.black)),
             ] else ...[
-              const Icon(Icons.auto_awesome_rounded, size: 14, color: Colors.black),
+              const Icon(Icons.auto_awesome_rounded,
+                  size: 14, color: Colors.black),
               const SizedBox(width: 8),
               Text('Analyze with Claude AI',
-                  style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                  style: AppText.body(14,
+                      weight: FontWeight.w600, color: Colors.black)),
             ],
           ],
         ),
@@ -337,7 +384,8 @@ class _AddGoalViewState extends State<AddGoalView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: 22, height: 22,
+                        width: 22,
+                        height: 22,
                         decoration: BoxDecoration(
                           color: _type.color.withOpacity(0.2),
                           shape: BoxShape.circle,
@@ -376,6 +424,7 @@ class _AddGoalViewState extends State<AddGoalView> {
                 )),
             const SizedBox(height: 10),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: _save,
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 12),
@@ -408,7 +457,11 @@ class _AddGoalViewState extends State<AddGoalView> {
   }
 
   Future<void> _analyze() async {
-    setState(() { _analyzing = true; _error = null; _result = null; });
+    setState(() {
+      _analyzing = true;
+      _error = null;
+      _result = null;
+    });
     try {
       final r = await AnthropicService.analyzeGoal(
         title: _titleCtrl.text,
@@ -437,10 +490,14 @@ class _AddGoalViewState extends State<AddGoalView> {
       rubricText: _rubricCtrl.text,
       isAnalyzed: true,
       aiSummary: _result!.summary,
-      steps: _result!.steps.map((s) => GoalStep(
-        title: s.title, detail: s.detail,
-        estimatedTime: s.estimatedTime, tips: s.tips,
-      )).toList(),
+      steps: _result!.steps
+          .map((s) => GoalStep(
+                title: s.title,
+                detail: s.detail,
+                estimatedTime: s.estimatedTime,
+                tips: s.tips,
+              ))
+          .toList(),
     );
     store.addGoal(goal);
     Navigator.pop(context);

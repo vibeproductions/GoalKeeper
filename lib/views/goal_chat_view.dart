@@ -36,16 +36,17 @@ class GoalChatView extends StatefulWidget {
 
 class _GoalChatViewState extends State<GoalChatView> {
   final List<ChatMessage> _messages = [];
-  final _controller     = TextEditingController();
-  final _scrollCtrl     = ScrollController();
-  final _focusNode      = FocusNode();
-  bool  _isThinking     = false;
+  final _controller = TextEditingController();
+  final _scrollCtrl = ScrollController();
+  final _focusNode = FocusNode();
+  bool _isThinking = false;
   String? _error;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _focusNode.requestFocus());
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => _focusNode.requestFocus());
   }
 
   @override
@@ -92,6 +93,7 @@ class _GoalChatViewState extends State<GoalChatView> {
           ),
           if (_messages.isNotEmpty)
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () => setState(() => _messages.clear()),
               child: Text('Clear',
                   style: AppText.body(11, color: AppColors.textTertiary)),
@@ -109,19 +111,21 @@ class _GoalChatViewState extends State<GoalChatView> {
           const SizedBox(height: 12),
           Text(
             'Ask Claude anything about\n"${widget.goal.title}"',
-            style: AppText.body(13, weight: FontWeight.w600,
-                color: AppColors.textSecondary),
+            style: AppText.body(13,
+                weight: FontWeight.w600, color: AppColors.textSecondary),
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
           ..._suggestions.map((s) => GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: () {
                   _controller.text = s;
                   _send();
                 },
                 child: Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
                     color: AppColors.accent.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(AppRadius.sm),
@@ -189,8 +193,8 @@ class _GoalChatViewState extends State<GoalChatView> {
                   isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 12, vertical: 9),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
                   decoration: BoxDecoration(
                     color: isUser
                         ? AppColors.accent
@@ -225,7 +229,8 @@ class _GoalChatViewState extends State<GoalChatView> {
   }
 
   Widget _avatar({required bool isUser}) => Container(
-        width: 28, height: 28,
+        width: 28,
+        height: 28,
         decoration: BoxDecoration(
           color: isUser
               ? Colors.white.withValues(alpha: 0.1)
@@ -259,14 +264,17 @@ class _GoalChatViewState extends State<GoalChatView> {
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
-                children: List.generate(3, (i) => Container(
-                  width: 6, height: 6,
-                  margin: const EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                    color: AppColors.accent.withValues(alpha: 0.6),
-                    shape: BoxShape.circle,
-                  ),
-                )),
+                children: List.generate(
+                    3,
+                    (i) => Container(
+                          width: 6,
+                          height: 6,
+                          margin: const EdgeInsets.symmetric(horizontal: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.accent.withValues(alpha: 0.6),
+                            shape: BoxShape.circle,
+                          ),
+                        )),
               ),
             ),
           ],
@@ -281,9 +289,11 @@ class _GoalChatViewState extends State<GoalChatView> {
           const Icon(Icons.error_outline_rounded,
               size: 13, color: AppColors.danger),
           const SizedBox(width: 8),
-          Expanded(child: Text(_error ?? '',
-              style: AppText.body(11, color: AppColors.danger))),
+          Expanded(
+              child: Text(_error ?? '',
+                  style: AppText.body(11, color: AppColors.danger))),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => setState(() => _error = null),
             child: const Icon(Icons.close, size: 13, color: AppColors.danger),
           ),
@@ -309,32 +319,31 @@ class _GoalChatViewState extends State<GoalChatView> {
                 fillColor: Colors.white.withValues(alpha: 0.06),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                      color: Colors.white.withValues(alpha: 0.1)),
+                  borderSide:
+                      BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
-                  borderSide: BorderSide(
-                      color: Colors.white.withValues(alpha: 0.1)),
+                  borderSide:
+                      BorderSide(color: Colors.white.withValues(alpha: 0.1)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),
                   borderSide: const BorderSide(color: AppColors.accent),
                 ),
-                contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 9),
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
               ),
             ),
           ),
           const SizedBox(width: 8),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: _isThinking ? null : _send,
             child: Icon(
               Icons.arrow_upward_rounded,
               size: 28,
-              color: _isThinking
-                  ? AppColors.textDisabled
-                  : AppColors.accent,
+              color: _isThinking ? AppColors.textDisabled : AppColors.accent,
             ),
           ),
         ]),

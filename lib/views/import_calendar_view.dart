@@ -22,7 +22,8 @@ class _ImportCalendarViewState extends State<ImportCalendarView> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.sidebarBg,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: SizedBox(
         width: 520,
         height: 540,
@@ -31,9 +32,10 @@ class _ImportCalendarViewState extends State<ImportCalendarView> {
             _header,
             const Divider(height: 1, color: AppColors.divider),
             _tabBar,
-            Expanded(child: _tab == 0
-                ? _ICSTab(onDone: () => Navigator.pop(context))
-                : _ManualTab(onDone: () => Navigator.pop(context))),
+            Expanded(
+                child: _tab == 0
+                    ? _ICSTab(onDone: () => Navigator.pop(context))
+                    : _ManualTab(onDone: () => Navigator.pop(context))),
           ],
         ),
       ),
@@ -45,13 +47,15 @@ class _ImportCalendarViewState extends State<ImportCalendarView> {
         child: Row(
           children: [
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Text('Calendar', style: AppText.display(18, weight: FontWeight.w700)),
+              Text('Calendar',
+                  style: AppText.display(18, weight: FontWeight.w700)),
               Text('Import a .ics file or add an event manually.',
                   style: AppText.body(12, color: AppColors.textSecondary)),
             ]),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.close_rounded, color: AppColors.textTertiary),
+              icon: const Icon(Icons.close_rounded,
+                  color: AppColors.textTertiary),
               onPressed: () => Navigator.pop(context),
             ),
           ],
@@ -65,6 +69,7 @@ class _ImportCalendarViewState extends State<ImportCalendarView> {
 
   Widget _tabItem(String label, int idx) => Expanded(
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => setState(() => _tab = idx),
           child: Column(mainAxisSize: MainAxisSize.min, children: [
             Padding(
@@ -76,7 +81,8 @@ class _ImportCalendarViewState extends State<ImportCalendarView> {
                           ? AppColors.eventBlue
                           : AppColors.textSecondary)),
             ),
-            Container(height: 2,
+            Container(
+                height: 2,
                 color: _tab == idx ? AppColors.eventBlue : Colors.transparent),
           ]),
         ),
@@ -125,24 +131,33 @@ class _ICSTabState extends State<_ICSTab> {
               ),
               const SizedBox(height: 16),
               GestureDetector(
+                behavior: HitTestBehavior.opaque,
                 onTap: _loading ? null : _pickFile,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 11),
                   decoration: BoxDecoration(
                     color: AppColors.eventBlue,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Row(mainAxisSize: MainAxisSize.min, children: [
                     if (_loading) ...[
-                      const SizedBox(width: 14, height: 14,
-                          child: CircularProgressIndicator(strokeWidth: 1.5, color: Colors.black)),
+                      const SizedBox(
+                          width: 14,
+                          height: 14,
+                          child: CircularProgressIndicator(
+                              strokeWidth: 1.5, color: Colors.black)),
                       const SizedBox(width: 8),
-                      Text('Parsing…', style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                      Text('Parsing…',
+                          style: AppText.body(14,
+                              weight: FontWeight.w600, color: Colors.black)),
                     ] else ...[
-                      const Icon(Icons.upload_file_rounded, size: 14, color: Colors.black),
+                      const Icon(Icons.upload_file_rounded,
+                          size: 14, color: Colors.black),
                       const SizedBox(width: 8),
                       Text('Choose .ics File…',
-                          style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                          style: AppText.body(14,
+                              weight: FontWeight.w600, color: Colors.black)),
                     ],
                   ]),
                 ),
@@ -159,7 +174,8 @@ class _ICSTabState extends State<_ICSTab> {
                 size: 13, color: AppColors.eventBlue),
             const SizedBox(width: 6),
             Text(_calName.isEmpty ? 'Imported Calendar' : _calName,
-                style: AppText.body(13, weight: FontWeight.w700, color: AppColors.eventBlue)),
+                style: AppText.body(13,
+                    weight: FontWeight.w700, color: AppColors.eventBlue)),
             const Spacer(),
             Text('${_events.length} events',
                 style: AppText.body(12, color: AppColors.textSecondary)),
@@ -173,13 +189,16 @@ class _ICSTabState extends State<_ICSTab> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Row(children: [
-                  Container(width: 8, height: 8,
+                  Container(
+                      width: 8,
+                      height: 8,
                       decoration: BoxDecoration(
                           color: e.color.color, shape: BoxShape.circle)),
                   const SizedBox(width: 10),
-                  Expanded(child: Text(e.title,
-                      style: AppText.body(12, weight: FontWeight.w500),
-                      overflow: TextOverflow.ellipsis)),
+                  Expanded(
+                      child: Text(e.title,
+                          style: AppText.body(12, weight: FontWeight.w500),
+                          overflow: TextOverflow.ellipsis)),
                   Text(
                     '${e.startDate.month}/${e.startDate.day}/${e.startDate.year}',
                     style: AppText.body(10, color: AppColors.textSecondary),
@@ -192,26 +211,35 @@ class _ICSTabState extends State<_ICSTab> {
           const SizedBox(height: 14),
           Row(children: [
             GestureDetector(
-              onTap: () => setState(() { _events = []; _calName = ''; }),
-              child: Text('Start Over', style: AppText.body(13, color: AppColors.textSecondary)),
+              behavior: HitTestBehavior.opaque,
+              onTap: () => setState(() {
+                _events = [];
+                _calName = '';
+              }),
+              child: Text('Start Over',
+                  style: AppText.body(13, color: AppColors.textSecondary)),
             ),
             const Spacer(),
             GestureDetector(
+              behavior: HitTestBehavior.opaque,
               onTap: () {
                 context.read<GoalStore>().addEvents(_events);
                 widget.onDone();
               },
               child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
                 decoration: BoxDecoration(
                   color: AppColors.eventBlue,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Row(children: [
-                  const Icon(Icons.check_circle_rounded, size: 13, color: Colors.black),
+                  const Icon(Icons.check_circle_rounded,
+                      size: 13, color: Colors.black),
                   const SizedBox(width: 6),
                   Text('Add ${_events.length} Events',
-                      style: AppText.body(13, weight: FontWeight.w600, color: Colors.black)),
+                      style: AppText.body(13,
+                          weight: FontWeight.w600, color: Colors.black)),
                 ]),
               ),
             ),
@@ -222,14 +250,20 @@ class _ICSTabState extends State<_ICSTab> {
   }
 
   Future<void> _pickFile() async {
-    setState(() { _loading = true; _error = null; });
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
     try {
-      final r = await FilePicker.platform.pickFiles(
-        allowedExtensions: ['ics'], type: FileType.custom);
+      final r = await FilePicker.platform
+          .pickFiles(allowedExtensions: ['ics'], type: FileType.custom);
       if (r != null && r.files.single.path != null) {
         final content = await File(r.files.single.path!).readAsString();
         final (events, name) = ICSParser.parse(content);
-        setState(() { _events = events; _calName = name; });
+        setState(() {
+          _events = events;
+          _calName = name;
+        });
       }
     } catch (e) {
       setState(() => _error = 'Could not read file: $e');
@@ -250,10 +284,10 @@ class _ManualTab extends StatefulWidget {
 class _ManualTabState extends State<_ManualTab> {
   final _titleCtrl = TextEditingController();
   final _notesCtrl = TextEditingController();
-  DateTime _start  = DateTime.now();
-  bool _hasEnd     = false;
-  DateTime _end    = DateTime.now().add(const Duration(hours: 1));
-  bool _allDay     = true;
+  DateTime _start = DateTime.now();
+  bool _hasEnd = false;
+  DateTime _end = DateTime.now().add(const Duration(hours: 1));
+  bool _allDay = true;
   CalendarEventColor _color = CalendarEventColor.blue;
 
   bool get _valid => _titleCtrl.text.trim().isNotEmpty;
@@ -263,68 +297,94 @@ class _ManualTabState extends State<_ManualTab> {
     return ListView(
       padding: const EdgeInsets.all(18),
       children: [
-        _field('Title', TextField(
-          controller: _titleCtrl,
-          style: AppText.body(14),
-          decoration: const InputDecoration(
-            hintText: 'e.g. Finals Week, Field Trip…',
-            border: InputBorder.none, contentPadding: EdgeInsets.zero),
-          onChanged: (_) => setState(() {}),
-        )),
-        _field('Date', Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Row(children: [
-            Switch(value: _allDay, onChanged: (v) => setState(() => _allDay = v)),
-            const SizedBox(width: 8),
-            Text('All Day', style: AppText.body(13, color: AppColors.textSecondary)),
-          ]),
-          TextButton(
-            onPressed: () async {
-              final d = await showDatePicker(context: context,
-                  initialDate: _start, firstDate: DateTime(2020),
-                  lastDate: DateTime(2030));
-              if (d != null) setState(() => _start = d);
-            },
-            child: Text('${_start.month}/${_start.day}/${_start.year}',
-                style: AppText.body(13, color: AppColors.eventBlue)),
-          ),
-        ])),
-        _field('Color', Row(children: CalendarEventColor.values.map((c) =>
-            GestureDetector(
-              onTap: () => setState(() => _color = c),
-              child: Container(
-                width: 24, height: 24,
-                margin: const EdgeInsets.only(right: 8),
-                decoration: BoxDecoration(
-                  color: c.color, shape: BoxShape.circle,
-                  border: Border.all(
-                    color: _color == c ? Colors.white : Colors.transparent,
-                    width: 2,
-                  ),
-                ),
+        _field(
+            'Title',
+            TextField(
+              controller: _titleCtrl,
+              style: AppText.body(14),
+              decoration: const InputDecoration(
+                  hintText: 'e.g. Finals Week, Field Trip…',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero),
+              onChanged: (_) => setState(() {}),
+            )),
+        _field(
+            'Date',
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Row(children: [
+                Switch(
+                    value: _allDay,
+                    onChanged: (v) => setState(() => _allDay = v)),
+                const SizedBox(width: 8),
+                Text('All Day',
+                    style: AppText.body(13, color: AppColors.textSecondary)),
+              ]),
+              TextButton(
+                onPressed: () async {
+                  final d = await showDatePicker(
+                      context: context,
+                      initialDate: _start,
+                      firstDate: DateTime(2020),
+                      lastDate: DateTime(2030));
+                  if (d != null) setState(() => _start = d);
+                },
+                child: Text('${_start.month}/${_start.day}/${_start.year}',
+                    style: AppText.body(13, color: AppColors.eventBlue)),
               ),
-            )).toList())),
-        _field('Notes', TextField(
-          controller: _notesCtrl,
-          style: AppText.body(13),
-          maxLines: 3,
-          decoration: const InputDecoration(
-            hintText: 'Any extra details…',
-            border: InputBorder.none, contentPadding: EdgeInsets.zero),
-        )),
+            ])),
+        _field(
+            'Color',
+            Row(
+                children: CalendarEventColor.values
+                    .map((c) => GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () => setState(() => _color = c),
+                          child: Container(
+                            width: 24,
+                            height: 24,
+                            margin: const EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              color: c.color,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: _color == c
+                                    ? Colors.white
+                                    : Colors.transparent,
+                                width: 2,
+                              ),
+                            ),
+                          ),
+                        ))
+                    .toList())),
+        _field(
+            'Notes',
+            TextField(
+              controller: _notesCtrl,
+              style: AppText.body(13),
+              maxLines: 3,
+              decoration: const InputDecoration(
+                  hintText: 'Any extra details…',
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.zero),
+            )),
         const SizedBox(height: 14),
         GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: _valid ? _save : null,
           child: Container(
             padding: const EdgeInsets.symmetric(vertical: 13),
             decoration: BoxDecoration(
-              color: _valid ? AppColors.eventBlue : Colors.grey.withOpacity(0.3),
+              color:
+                  _valid ? AppColors.eventBlue : Colors.grey.withOpacity(0.3),
               borderRadius: BorderRadius.circular(12),
             ),
             child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-              const Icon(Icons.add_circle_rounded, size: 14, color: Colors.black),
+              const Icon(Icons.add_circle_rounded,
+                  size: 14, color: Colors.black),
               const SizedBox(width: 8),
               Text('Add Event',
-                  style: AppText.body(14, weight: FontWeight.w600, color: Colors.black)),
+                  style: AppText.body(14,
+                      weight: FontWeight.w600, color: Colors.black)),
             ]),
           ),
         ),
@@ -343,10 +403,14 @@ class _ManualTabState extends State<_ManualTab> {
 
   void _save() {
     context.read<GoalStore>().addEvent(CalendarEvent(
-      title: _titleCtrl.text, notes: _notesCtrl.text,
-      startDate: _start, endDate: _hasEnd ? _end : null,
-      isAllDay: _allDay, color: _color, source: CalendarEventSource.manual,
-    ));
+          title: _titleCtrl.text,
+          notes: _notesCtrl.text,
+          startDate: _start,
+          endDate: _hasEnd ? _end : null,
+          isAllDay: _allDay,
+          color: _color,
+          source: CalendarEventSource.manual,
+        ));
     widget.onDone();
   }
 }

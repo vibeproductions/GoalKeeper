@@ -7,7 +7,8 @@ import 'package:goalkeeper/theme/app_theme.dart';
 class StudyGuideDialog extends StatefulWidget {
   final StudyGuide guide;
   final Color accentColor;
-  const StudyGuideDialog({super.key, required this.guide, required this.accentColor});
+  const StudyGuideDialog(
+      {super.key, required this.guide, required this.accentColor});
   @override
   State<StudyGuideDialog> createState() => _StudyGuideDialogState();
 }
@@ -15,7 +16,7 @@ class StudyGuideDialog extends StatefulWidget {
 class _StudyGuideDialogState extends State<StudyGuideDialog> {
   int _tab = 0;
   final Set<String> _expandedSections = {};
-  final Set<String> _revealedAnswers  = {};
+  final Set<String> _revealedAnswers = {};
 
   @override
   void initState() {
@@ -29,7 +30,8 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.background,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.lg)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(AppRadius.lg)),
       child: SizedBox(
         width: 600,
         height: 700,
@@ -37,7 +39,8 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
           children: [
             _header,
             _tabBar,
-            Expanded(child: ListView(
+            Expanded(
+                child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
                 if (_tab == 0) ..._contentTab,
@@ -55,18 +58,22 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
         padding: const EdgeInsets.fromLTRB(18, 16, 18, 10),
         decoration: BoxDecoration(
           color: widget.accentColor.withOpacity(0.07),
-          border: Border(bottom: BorderSide(color: widget.accentColor.withOpacity(0.2))),
+          border: Border(
+              bottom: BorderSide(color: widget.accentColor.withOpacity(0.2))),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
-              Icon(Icons.menu_book_rounded, size: 13, color: widget.accentColor),
+              Icon(Icons.menu_book_rounded,
+                  size: 13, color: widget.accentColor),
               const SizedBox(width: 6),
-              Text('STUDY GUIDE', style: AppText.label(10, color: widget.accentColor)),
+              Text('STUDY GUIDE',
+                  style: AppText.label(10, color: widget.accentColor)),
               const Spacer(),
               IconButton(
-                icon: const Icon(Icons.close, size: 18, color: AppColors.textTertiary),
+                icon: const Icon(Icons.close,
+                    size: 18, color: AppColors.textTertiary),
                 onPressed: () => Navigator.pop(context),
               ),
             ]),
@@ -89,6 +96,7 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
 
   Widget _tabItem(String label, int idx) => Expanded(
         child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => setState(() => _tab = idx),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -98,9 +106,12 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
                 child: Text(label,
                     style: AppText.body(12,
                         weight: _tab == idx ? FontWeight.w600 : FontWeight.w400,
-                        color: _tab == idx ? widget.accentColor : AppColors.textSecondary)),
+                        color: _tab == idx
+                            ? widget.accentColor
+                            : AppColors.textSecondary)),
               ),
-              Container(height: 2,
+              Container(
+                  height: 2,
                   color: _tab == idx ? widget.accentColor : Colors.transparent),
             ],
           ),
@@ -110,17 +121,22 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
   List<Widget> get _contentTab => widget.guide.sections.map((section) {
         final expanded = _expandedSections.contains(section.id);
         return GestureDetector(
+          behavior: HitTestBehavior.opaque,
           onTap: () => setState(() {
-            if (expanded) _expandedSections.remove(section.id);
-            else _expandedSections.add(section.id);
+            if (expanded)
+              _expandedSections.remove(section.id);
+            else
+              _expandedSections.add(section.id);
           }),
           child: Container(
             margin: const EdgeInsets.only(bottom: 8),
             decoration: BoxDecoration(
               color: Colors.white.withOpacity(0.04),
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: expanded
-                  ? widget.accentColor.withOpacity(0.2) : Colors.white.withOpacity(0.06)),
+              border: Border.all(
+                  color: expanded
+                      ? widget.accentColor.withOpacity(0.2)
+                      : Colors.white.withOpacity(0.06)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,8 +147,9 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
                     Icon(expanded ? Icons.expand_more : Icons.chevron_right,
                         size: 14, color: widget.accentColor),
                     const SizedBox(width: 8),
-                    Expanded(child: Text(section.heading,
-                        style: AppText.body(14, weight: FontWeight.w600))),
+                    Expanded(
+                        child: Text(section.heading,
+                            style: AppText.body(14, weight: FontWeight.w600))),
                     Text('${section.keyPoints.length} key points',
                         style: AppText.body(10, color: AppColors.textTertiary)),
                   ]),
@@ -145,7 +162,8 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(section.content,
-                            style: AppText.body(12, color: AppColors.textSecondary)),
+                            style: AppText.body(12,
+                                color: AppColors.textSecondary)),
                         if (section.keyPoints.isNotEmpty) ...[
                           const SizedBox(height: 10),
                           Text('KEY POINTS', style: AppText.label(9)),
@@ -156,14 +174,19 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      width: 5, height: 5, margin: const EdgeInsets.only(top: 5),
+                                      width: 5,
+                                      height: 5,
+                                      margin: const EdgeInsets.only(top: 5),
                                       decoration: BoxDecoration(
-                                          color: widget.accentColor, shape: BoxShape.circle),
+                                          color: widget.accentColor,
+                                          shape: BoxShape.circle),
                                     ),
                                     const SizedBox(width: 8),
-                                    Expanded(child: Text(p,
-                                        style: AppText.body(12,
-                                            color: Colors.white.withOpacity(0.85)))),
+                                    Expanded(
+                                        child: Text(p,
+                                            style: AppText.body(12,
+                                                color: Colors.white
+                                                    .withOpacity(0.85)))),
                                   ],
                                 ),
                               )),
@@ -180,20 +203,26 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
 
   List<Widget> get _practiceTab => [
         Row(children: [
-          Expanded(child: Text('Tap to reveal answers',
-              style: AppText.body(12, color: AppColors.textTertiary))),
+          Expanded(
+              child: Text('Tap to reveal answers',
+                  style: AppText.body(12, color: AppColors.textTertiary))),
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => setState(() {
-              if (_revealedAnswers.length == widget.guide.practiceQuestions.length) {
+              if (_revealedAnswers.length ==
+                  widget.guide.practiceQuestions.length) {
                 _revealedAnswers.clear();
               } else {
-                _revealedAnswers.addAll(widget.guide.practiceQuestions.map((q) => q.id));
+                _revealedAnswers
+                    .addAll(widget.guide.practiceQuestions.map((q) => q.id));
               }
             }),
             child: Text(
               _revealedAnswers.length == widget.guide.practiceQuestions.length
-                  ? 'Hide All' : 'Reveal All',
-              style: AppText.body(11, weight: FontWeight.w600, color: widget.accentColor),
+                  ? 'Hide All'
+                  : 'Reveal All',
+              style: AppText.body(11,
+                  weight: FontWeight.w600, color: widget.accentColor),
             ),
           ),
         ]),
@@ -202,9 +231,12 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
           final q = e.value;
           final revealed = _revealedAnswers.contains(q.id);
           return GestureDetector(
+            behavior: HitTestBehavior.opaque,
             onTap: () => setState(() {
-              if (revealed) _revealedAnswers.remove(q.id);
-              else _revealedAnswers.add(q.id);
+              if (revealed)
+                _revealedAnswers.remove(q.id);
+              else
+                _revealedAnswers.add(q.id);
             }),
             child: Container(
               margin: const EdgeInsets.only(bottom: 8),
@@ -214,37 +246,51 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
                     ? AppColors.success.withOpacity(0.06)
                     : Colors.white.withOpacity(0.04),
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: revealed
-                    ? AppColors.success.withOpacity(0.2) : Colors.white.withOpacity(0.06)),
+                border: Border.all(
+                    color: revealed
+                        ? AppColors.success.withOpacity(0.2)
+                        : Colors.white.withOpacity(0.06)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
                     Container(
-                      width: 22, height: 22,
+                      width: 22,
+                      height: 22,
                       decoration: BoxDecoration(
-                          color: widget.accentColor.withOpacity(0.15), shape: BoxShape.circle),
-                      child: Center(child: Text('${e.key + 1}',
-                          style: AppText.body(10,
-                              weight: FontWeight.w700, color: widget.accentColor))),
+                          color: widget.accentColor.withOpacity(0.15),
+                          shape: BoxShape.circle),
+                      child: Center(
+                          child: Text('${e.key + 1}',
+                              style: AppText.body(10,
+                                  weight: FontWeight.w700,
+                                  color: widget.accentColor))),
                     ),
                     const SizedBox(width: 10),
-                    Expanded(child: Text(q.question,
-                        style: AppText.body(13, weight: FontWeight.w500))),
-                    Icon(revealed ? Icons.visibility_off_rounded : Icons.visibility_rounded,
-                        size: 14, color: AppColors.textTertiary),
+                    Expanded(
+                        child: Text(q.question,
+                            style: AppText.body(13, weight: FontWeight.w500))),
+                    Icon(
+                        revealed
+                            ? Icons.visibility_off_rounded
+                            : Icons.visibility_rounded,
+                        size: 14,
+                        color: AppColors.textTertiary),
                   ]),
                   if (revealed) ...[
                     const Divider(height: 16, color: AppColors.divider),
-                    Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                      const Icon(Icons.check_circle_rounded,
-                          size: 13, color: AppColors.success),
-                      const SizedBox(width: 6),
-                      Expanded(child: Text(q.answer,
-                          style: AppText.body(12,
-                              color: const Color(0xFFA8E6CF)))),
-                    ]),
+                    Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.check_circle_rounded,
+                              size: 13, color: AppColors.success),
+                          const SizedBox(width: 6),
+                          Expanded(
+                              child: Text(q.answer,
+                                  style: AppText.body(12,
+                                      color: const Color(0xFFA8E6CF)))),
+                        ]),
                   ],
                 ],
               ),
@@ -253,25 +299,30 @@ class _StudyGuideDialogState extends State<StudyGuideDialog> {
         }),
       ];
 
-  List<Widget> get _tipsTab => widget.guide.studyTips.map((tip) => Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.04),
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Container(
-            width: 28, height: 28,
+  List<Widget> get _tipsTab => widget.guide.studyTips
+      .map((tip) => Container(
+            margin: const EdgeInsets.only(bottom: 8),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-                color: AppColors.personalGoal.withOpacity(0.15),
-                borderRadius: BorderRadius.circular(6)),
-            child: const Icon(Icons.lightbulb_rounded,
-                size: 15, color: AppColors.personalGoal),
-          ),
-          const SizedBox(width: 12),
-          Expanded(child: Text(tip,
-              style: AppText.body(13, color: Colors.white.withOpacity(0.85)))),
-        ]),
-      )).toList();
+              color: Colors.white.withOpacity(0.04),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                    color: AppColors.personalGoal.withOpacity(0.15),
+                    borderRadius: BorderRadius.circular(6)),
+                child: const Icon(Icons.lightbulb_rounded,
+                    size: 15, color: AppColors.personalGoal),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                  child: Text(tip,
+                      style: AppText.body(13,
+                          color: Colors.white.withOpacity(0.85)))),
+            ]),
+          ))
+      .toList();
 }

@@ -19,9 +19,9 @@ class _FullCalendarViewState extends State<FullCalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    final store     = context.watch<GoalStore>();
+    final store = context.watch<GoalStore>();
     final deadlines = store.allUpcomingDeadlines;
-    final filtered  = _filter == null
+    final filtered = _filter == null
         ? deadlines
         : deadlines.where((d) => d.kind == _filter).toList();
 
@@ -45,7 +45,7 @@ class _FullCalendarViewState extends State<FullCalendarView> {
   }
 
   Widget _header(GoalStore store) {
-    final all  = store.allUpcomingDeadlines;
+    final all = store.allUpcomingDeadlines;
     final next = all.isNotEmpty ? all.first : null;
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 10),
@@ -73,7 +73,8 @@ class _FullCalendarViewState extends State<FullCalendarView> {
                   next.daysUntil == 0 ? 'Today' : 'in ${next.daysUntil}d',
                   style: AppText.display(14,
                       weight: FontWeight.w700,
-                      color: next.daysUntil <= 2 ? AppColors.danger : next.color),
+                      color:
+                          next.daysUntil <= 2 ? AppColors.danger : next.color),
                 ),
               ],
             ),
@@ -98,6 +99,7 @@ class _FullCalendarViewState extends State<FullCalendarView> {
   Widget _filterChip(String label, DeadlineKind? kind) {
     final active = _filter == kind;
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTap: () => setState(() => _filter = kind),
       child: Container(
         margin: const EdgeInsets.only(right: 6),
@@ -115,16 +117,21 @@ class _FullCalendarViewState extends State<FullCalendarView> {
   }
 
   List<Widget> _buildGroups(List<AnyDeadline> deadlines, GoalStore store) {
-    final today     = deadlines.where((d) => d.daysUntil == 0).toList();
-    final thisWeek  = deadlines.where((d) => d.daysUntil > 0 && d.daysUntil <= 7).toList();
-    final thisMonth = deadlines.where((d) => d.daysUntil > 7 && d.daysUntil <= 30).toList();
-    final later     = deadlines.where((d) => d.daysUntil > 30).toList();
+    final today = deadlines.where((d) => d.daysUntil == 0).toList();
+    final thisWeek =
+        deadlines.where((d) => d.daysUntil > 0 && d.daysUntil <= 7).toList();
+    final thisMonth =
+        deadlines.where((d) => d.daysUntil > 7 && d.daysUntil <= 30).toList();
+    final later = deadlines.where((d) => d.daysUntil > 30).toList();
 
     final widgets = <Widget>[];
-    if (today.isNotEmpty)     widgets.addAll(_group('Today', today, urgent: true, store: store));
-    if (thisWeek.isNotEmpty)  widgets.addAll(_group('This Week', thisWeek, store: store));
-    if (thisMonth.isNotEmpty) widgets.addAll(_group('This Month', thisMonth, store: store));
-    if (later.isNotEmpty)     widgets.addAll(_group('Later', later, store: store));
+    if (today.isNotEmpty)
+      widgets.addAll(_group('Today', today, urgent: true, store: store));
+    if (thisWeek.isNotEmpty)
+      widgets.addAll(_group('This Week', thisWeek, store: store));
+    if (thisMonth.isNotEmpty)
+      widgets.addAll(_group('This Month', thisMonth, store: store));
+    if (later.isNotEmpty) widgets.addAll(_group('Later', later, store: store));
     return widgets;
   }
 
@@ -141,7 +148,8 @@ class _FullCalendarViewState extends State<FullCalendarView> {
             if (urgent) ...[
               const SizedBox(width: 5),
               Container(
-                  width: 5, height: 5,
+                  width: 5,
+                  height: 5,
                   decoration: const BoxDecoration(
                       color: AppColors.danger, shape: BoxShape.circle)),
             ],
@@ -153,6 +161,7 @@ class _FullCalendarViewState extends State<FullCalendarView> {
   }
 
   Widget _card(AnyDeadline deadline, GoalStore store) => GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () {
           switch (deadline.kind) {
             case DeadlineKind.goal:
@@ -178,7 +187,8 @@ class _FullCalendarViewState extends State<FullCalendarView> {
           child: Row(
             children: [
               Container(
-                width: 40, height: 40,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   color: deadline.color.withOpacity(0.15),
                   borderRadius: BorderRadius.circular(10),
@@ -197,11 +207,15 @@ class _FullCalendarViewState extends State<FullCalendarView> {
                     Row(
                       children: [
                         Text(deadline.subtitle,
-                            style: AppText.body(11, color: AppColors.textSecondary)),
-                        Text(' · ', style: AppText.body(11, color: AppColors.textTertiary)),
+                            style: AppText.body(11,
+                                color: AppColors.textSecondary)),
+                        Text(' · ',
+                            style: AppText.body(11,
+                                color: AppColors.textTertiary)),
                         Text(
                           '${deadline.date.month}/${deadline.date.day}/${deadline.date.year}',
-                          style: AppText.body(11, color: AppColors.textTertiary),
+                          style:
+                              AppText.body(11, color: AppColors.textTertiary),
                         ),
                       ],
                     ),
@@ -219,8 +233,7 @@ class _FullCalendarViewState extends State<FullCalendarView> {
         mainAxisSize: MainAxisSize.min,
         children: [
           if (days == 0)
-            Text('TODAY',
-                style: AppText.label(10, color: AppColors.danger))
+            Text('TODAY', style: AppText.label(10, color: AppColors.danger))
           else ...[
             Text('$days',
                 style: AppText.mono(20,

@@ -35,10 +35,10 @@ class MainScaffold extends StatefulWidget {
 }
 
 class _MainScaffoldState extends State<MainScaffold> {
-  double _sidebarWidth  = 250;
+  double _sidebarWidth = 250;
   double _calendarWidth = 370;
-  static const double _minSidebarWidth  = 200;
-  static const double _maxSidebarWidth  = 300;
+  static const double _minSidebarWidth = 200;
+  static const double _maxSidebarWidth = 300;
   static const double _minCalendarWidth = 300;
   static const double _maxCalendarWidth = 440;
 
@@ -54,10 +54,16 @@ class _MainScaffoldState extends State<MainScaffold> {
       child: Actions(
         actions: {
           _OpenSettingsIntent: CallbackAction<_OpenSettingsIntent>(
-            onInvoke: (_) { _showSettings(); return null; },
+            onInvoke: (_) {
+              _showSettings();
+              return null;
+            },
           ),
           _NewGoalIntent: CallbackAction<_NewGoalIntent>(
-            onInvoke: (_) { _showAddGoal(); return null; },
+            onInvoke: (_) {
+              _showAddGoal();
+              return null;
+            },
           ),
         },
         child: Focus(
@@ -77,7 +83,7 @@ class _MainScaffoldState extends State<MainScaffold> {
                       SizedBox(
                         width: _sidebarWidth,
                         child: SidebarView(
-                          onAddGoal:        _showAddGoal,
+                          onAddGoal: _showAddGoal,
                           onImportSchedule: _showImportSchedule,
                           onImportCalendar: _showImportCalendar,
                         ),
@@ -235,6 +241,7 @@ class _TitleBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onPanStart: (_) => windowManager.startDragging(),
       child: Container(
         height: 38,
@@ -281,6 +288,7 @@ class _ResizeHandle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onHorizontalDragUpdate: (d) => onDrag(d.delta.dx),
       child: MouseRegion(
         cursor: SystemMouseCursors.resizeColumn,
