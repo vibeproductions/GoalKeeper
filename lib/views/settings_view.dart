@@ -547,7 +547,8 @@ class _ReleaseNotesSectionState extends State<_ReleaseNotesSection> {
   Future<void> _fetch() async {
     try {
       final r = await http.get(
-        Uri.parse('https://api.github.com/repos/TECWiSaRd/GoalKeeper/releases'),
+        Uri.parse(
+            'https://api.github.com/repos/vibeproductions/GoalKeeper/releases'),
         headers: {'Accept': 'application/vnd.github+json'},
       );
       if (r.statusCode == 200) {

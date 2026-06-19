@@ -40,18 +40,27 @@ class VersionManifest {
   final String version;
   final String url;
   final String notes;
-  VersionManifest({required this.version, required this.url, required this.notes});
+  VersionManifest(
+      {required this.version, required this.url, required this.notes});
 
   factory VersionManifest.fromJson(Map<String, dynamic> j) => VersionManifest(
         version: j['version'] as String,
-        url:     j['url'] as String,
-        notes:   j['notes'] as String? ?? '',
+        url: j['url'] as String,
+        notes: j['notes'] as String? ?? '',
       );
 }
 
 // ─── Update state ─────────────────────────────────────────────────────────────
 
-enum UpdateStateKind { idle, checking, upToDate, available, downloading, readyToInstall, error }
+enum UpdateStateKind {
+  idle,
+  checking,
+  upToDate,
+  available,
+  downloading,
+  readyToInstall,
+  error
+}
 
 class UpdateState {
   final UpdateStateKind kind;
@@ -68,7 +77,7 @@ class UpdateState {
     this.errorMessage,
   });
 
-  static const idle     = UpdateState._(kind: UpdateStateKind.idle);
+  static const idle = UpdateState._(kind: UpdateStateKind.idle);
   static const checking = UpdateState._(kind: UpdateStateKind.checking);
   static const upToDate = UpdateState._(kind: UpdateStateKind.upToDate);
 
@@ -88,16 +97,15 @@ class UpdateState {
 // ─── Service ──────────────────────────────────────────────────────────────────
 
 class UpdateService extends ChangeNotifier {
-  // ⚠️ Replace with your GitHub raw URL
   static const manifestUrl =
-      'https://raw.githubusercontent.com/TECWiSaRd/GoalKeeper/main/version.json';
+      'https://raw.githubusercontent.com/vibeproductions/GoalKeeper/main/version_flutter.json';
 
   UpdateState state = UpdateState.idle;
 
   String get currentVersion {
     // In a real app, read from pubspec or a generated file.
     // For now, hardcode and update with each release.
-    return '1.0.0';
+    return '1.1.5';
   }
 
   // ── Check for updates ──────────────────────────────────────────────────────
@@ -105,23 +113,27 @@ class UpdateService extends ChangeNotifier {
     state = UpdateState.checking;
     notifyListeners();
     try {
-      final response = await http.get(Uri.parse(manifestUrl))
+      final response = await http
+          .get(Uri.parse(manifestUrl))
           .timeout(const Duration(seconds: 15));
       if (response.statusCode != 200) {
-        state = UpdateState.error('Could not reach update server (${response.statusCode})');
+        state = UpdateState.error(
+            'Could not reach update server (${response.statusCode})');
         notifyListeners();
         return;
       }
       final manifest = VersionManifest.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
       final remote = AppVersion.parse(manifest.version);
-      final local  = AppVersion.parse(currentVersion);
+      final local = AppVersion.parse(currentVersion);
       if (remote == null || local == null) {
         state = UpdateState.error('Could not parse version numbers.');
         notifyListeners();
         return;
       }
-      state = remote > local ? UpdateState.available(manifest) : UpdateState.upToDate;
+      state = remote > local
+          ? UpdateState.available(manifest)
+          : UpdateState.upToDate;
     } catch (e) {
       state = UpdateState.error(e.toString());
     }
@@ -133,7 +145,7 @@ class UpdateService extends ChangeNotifier {
     state = UpdateState.downloading(0);
     notifyListeners();
     try {
-      final request  = http.Request('GET', Uri.parse(url));
+      final request = http.Request('GET', Uri.parse(url));
       final response = await request.send();
 
       if (response.statusCode != 200) {
@@ -142,12 +154,12 @@ class UpdateService extends ChangeNotifier {
         return;
       }
 
-      final tmp      = await getTemporaryDirectory();
-      final zipPath  = p.join(tmp.path, 'GoalKeeper_update.zip');
-      final file     = File(zipPath);
-      final sink     = file.openWrite();
-      final total    = response.contentLength ?? 0;
-      var   received = 0;
+      final tmp = await getTemporaryDirectory();
+      final zipPath = p.join(tmp.path, 'GoalKeeper_update.zip');
+      final file = File(zipPath);
+      final sink = file.openWrite();
+      final total = response.contentLength ?? 0;
+      var received = 0;
 
       await response.stream.forEach((chunk) {
         sink.add(chunk);
@@ -169,13 +181,14 @@ class UpdateService extends ChangeNotifier {
   // ── Install ────────────────────────────────────────────────────────────────
   Future<void> installUpdate(String zipPath) async {
     try {
-      final tmp        = await getTemporaryDirectory();
+      final tmp = await getTemporaryDirectory();
       final extractDir = Directory(p.join(tmp.path, 'GoalKeeper_extracted'));
       if (await extractDir.exists()) await extractDir.delete(recursive: true);
       await extractDir.create(recursive: true);
 
       // Unzip
-      final result = await Process.run('unzip', ['-q', zipPath, '-d', extractDir.path]);
+      final result =
+          await Process.run('unzip', ['-q', zipPath, '-d', extractDir.path]);
       if (result.exitCode != 0) {
         throw Exception('Unzip failed: ${result.stderr}');
       }
@@ -212,7 +225,9 @@ class UpdateService extends ChangeNotifier {
   Future<String?> _findApp(Directory dir) async {
     await for (final entity in dir.list(recursive: true)) {
       if (Platform.isMacOS && entity.path.endsWith('.app')) return entity.path;
-      if (Platform.isWindows && entity.path.endsWith('goalkeeper.exe')) return entity.path;
+      if (Platform.isWindows && entity.path.endsWith('goalkeeper.exe')) {
+        return entity.path;
+      }
     }
     return null;
   }
